@@ -5,11 +5,11 @@ import java.util.List;
 public class TreeTraversals {
 
     public static void main(String[] args) {
-        BinaryTree tree = new BinaryTree(1);
-        tree.getRoot().setLeft(new BinaryTreeNode(2));
-        tree.getRoot().setRight(new BinaryTreeNode(3));
-        tree.getRoot().getLeft().setLeft(new BinaryTreeNode(4));
-        tree.getRoot().getLeft().setRight(new BinaryTreeNode(5));
+        BinaryTree<Integer> tree = new BinaryTree<>(1);
+        tree.getRoot().setLeft(new BinaryTreeNode<>(2));
+        tree.getRoot().setRight(new BinaryTreeNode<>(3));
+        tree.getRoot().getLeft().setLeft(new BinaryTreeNode<>(4));
+        tree.getRoot().getLeft().setRight(new BinaryTreeNode<>(5));
 
         List<Integer> inOrderRepresentation = tree.getTreeRepresentation("inorder");
         List<Integer> preOrderRepresentation = tree.getTreeRepresentation("preorder");
