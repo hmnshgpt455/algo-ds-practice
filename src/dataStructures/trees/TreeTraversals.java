@@ -14,12 +14,18 @@ public class TreeTraversals {
         List<Integer> inOrderRepresentation = tree.getTreeRepresentation("inorder");
         List<Integer> preOrderRepresentation = tree.getTreeRepresentation("preorder");
         List<Integer> postOrderRepresentation = tree.getTreeRepresentation("postorder");
+        List<Integer> levelOrderRepresentation = tree.getLevelOrderTraversal();
 
+        System.out.print("Inorder --> ");
         inOrderRepresentation.forEach(System.out::print);
         System.out.println();
+        System.out.print("Preorder --> ");
         preOrderRepresentation.forEach(System.out::print);
         System.out.println();
+        System.out.print("Postorder --> ");
         postOrderRepresentation.forEach(System.out::print);
         System.out.println();
+        System.out.print("Levelorder --> ");
+        levelOrderRepresentation.forEach(System.out::print);
     }
 }

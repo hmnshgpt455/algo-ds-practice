@@ -82,7 +82,6 @@ public class BinaryTree<T> implements Tree {
         root.setRight(convertToBinaryTreeUsingInorderAndPreOrder(preOrder, characterIntegerHashMap,
                 indexOfRootInInOrder + 1, endIndex));
 
-
         return root;
     }
 
@@ -108,6 +107,27 @@ public class BinaryTree<T> implements Tree {
             Optional.ofNullable(root.getValue()).ifPresent(representation::add);
             Optional.ofNullable(root.getRight()).ifPresent(right -> inOrderTraversal(representation, right));
         });
+    }
+
+    public List<T> getLevelOrderTraversal() {
+        List<T> levelOrderRepresentation = new ArrayList<>();
+        Queue<BinaryTreeNode<T>> levelOrderQueue = new LinkedList<>();
+        levelOrderQueue.add(this.getRoot());
+        levelOrderTraversal(levelOrderQueue, levelOrderRepresentation);
+
+        return levelOrderRepresentation;
+    }
+
+    private void levelOrderTraversal(Queue<BinaryTreeNode<T>> nodeQueue, List<T> levelOrderRepresentation) {
+        if (!nodeQueue.isEmpty()) {
+            BinaryTreeNode<T> currentNode = nodeQueue.poll();
+
+            levelOrderRepresentation.add(currentNode.getValue());
+
+            Optional.ofNullable(currentNode.getLeft()).ifPresent(nodeQueue::add);
+            Optional.ofNullable(currentNode.getRight()).ifPresent(nodeQueue::add);
+            levelOrderTraversal(nodeQueue, levelOrderRepresentation);
+        }
     }
 
 }
