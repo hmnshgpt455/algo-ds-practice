@@ -1,4 +1,4 @@
-package dataStructures.trees;
+package dataStructures.trees.modals;
 
 public class BinaryTreeNode<T> implements TreeNode {
 

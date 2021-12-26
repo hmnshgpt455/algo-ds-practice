@@ -1,4 +1,4 @@
-package dataStructures.trees;
+package dataStructures.trees.modals;
 
 import java.util.*;
 import java.util.function.Function;
@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 public class BinaryTree<T> implements Tree {
 
-    private BinaryTreeNode<T> root;
+    protected BinaryTreeNode<T> root;
 
     public BinaryTree(BinaryTreeNode<T> root) {
         this.root = root;
@@ -27,7 +27,7 @@ public class BinaryTree<T> implements Tree {
 
     private int preIndex = 0;
 
-    List<T> getTreeRepresentation(String traversalType) {
+    public List<T> getTreeRepresentation(String traversalType) {
         List<T> inOrderRepresentation = new ArrayList<>();
         switch (traversalType) {
             case "inorder":
@@ -55,17 +55,15 @@ public class BinaryTree<T> implements Tree {
         BinaryTreeNode<T> root = treeQueue.peek();
         head = head.getNext();
 
-        while (!treeQueue.isEmpty()) {
+        while (!treeQueue.isEmpty() && head != null) {
             BinaryTreeNode<T> currentElement = treeQueue.poll();
+            currentElement.setLeft(new BinaryTreeNode<>(head.getData()));
+            treeQueue.add(currentElement.getLeft());
+            head = head.getNext();
             if (head != null) {
-                currentElement.setLeft(new BinaryTreeNode<>(head.getData()));
-                treeQueue.add(currentElement.getLeft());
+                currentElement.setRight(new BinaryTreeNode<>(head.getData()));
+                treeQueue.add(currentElement.getRight());
                 head = head.getNext();
-                if (head != null) {
-                    currentElement.setRight(new BinaryTreeNode<>(head.getData()));
-                    treeQueue.add(currentElement.getRight());
-                    head = head.getNext();
-                }
             }
         }
         return root;

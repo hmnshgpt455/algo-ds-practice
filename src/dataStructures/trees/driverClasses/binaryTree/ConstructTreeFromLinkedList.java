@@ -1,4 +1,7 @@
-package dataStructures.trees;
+package dataStructures.trees.driverClasses.binaryTree;
+
+import dataStructures.trees.modals.BinaryTree;
+import dataStructures.trees.modals.TreeLinkedList;
 
 import java.util.Scanner;
 

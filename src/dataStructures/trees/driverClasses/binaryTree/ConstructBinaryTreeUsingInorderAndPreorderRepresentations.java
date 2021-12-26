@@ -1,4 +1,6 @@
-package dataStructures.trees;
+package dataStructures.trees.driverClasses.binaryTree;
+
+import dataStructures.trees.modals.BinaryTree;
 
 import java.util.Scanner;
 
@@ -11,10 +13,10 @@ public class ConstructBinaryTreeUsingInorderAndPreorderRepresentations {
         BinaryTree<Character> createdBinaryTree = new BinaryTree<>(inOrder, preOrder, null);
 
         String newInOrder = createdBinaryTree.getTreeRepresentation("inorder")
-                .stream().reduce(new String(""), (resultString, node) -> resultString + node, String::concat);
+                .stream().reduce("", (resultString, node) -> resultString + node, String::concat);
 
         String newPreOrder = createdBinaryTree.getTreeRepresentation("preorder")
-                .stream().reduce(new String(""), (resultString, node) -> resultString + node, String::concat);
+                .stream().reduce("", (resultString, node) -> resultString + node, String::concat);
 
         if (inOrder.equals(newInOrder)) {
             System.out.println("Inorder matched");
