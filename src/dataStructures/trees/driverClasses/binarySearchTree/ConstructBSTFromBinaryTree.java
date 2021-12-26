@@ -15,7 +15,7 @@ public class ConstructBSTFromBinaryTree {
         binaryTree.getRoot().getRight().setRight(new BinaryTreeNode<>(5));
 
         List<Integer> originalInOrder = binaryTree.getTreeRepresentation("inorder");
-        BinarySearchTree<Integer> createdBst = new BinarySearchTree<Integer>(binaryTree, Integer::compareTo);
+        BinarySearchTree<Integer> createdBst = new BinarySearchTree<Integer>(binaryTree);
         List<Integer> newInOrder = createdBst.getTreeRepresentation("inorder");
         System.out.println("Original inorder");
         originalInOrder.forEach(el -> System.out.print(el + " "));

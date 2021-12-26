@@ -1,50 +1,48 @@
 package dataStructures.trees.modals;
 
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.IntStream;
 
 public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTree<T> {
 
     private int preIndex;
     private int inOrderIndexToConvertToBST;
 
-    public BinarySearchTree(List<T> preOrder, Comparator<T> comparator) {
+    public BinarySearchTree(List<T> preOrder) {
         preIndex = 0;
         T max = null, min = null;
         for (int i = 0; i<preOrder.size(); i++) {
             if (i == 0) {
                 max = min = preOrder.get(i);
             } else {
-                if (comparator.compare(preOrder.get(i), max) > 0) {
+                if (preOrder.get(i).compareTo(max) > 0) {
                     max = preOrder.get(i);
-                } else if (comparator.compare(preOrder.get(i), min) < 0) {
+                } else if (preOrder.get(i).compareTo(min) < 0) {
                     min = preOrder.get(i);
                 }
             }
         }
-        this.root = constructTreeUsingPreOrder(preOrder, max, min, comparator);
+        this.root = constructTreeUsingPreOrder(preOrder, max, min);
     }
 
-    private BinaryTreeNode<T> constructTreeUsingPreOrder(List<T> preOrder, T maxValue, T minValue, Comparator<T> comparator) {
+    private BinaryTreeNode<T> constructTreeUsingPreOrder(List<T> preOrder, T maxValue, T minValue) {
         if (preIndex >= preOrder.size()) {
             return null;
         }
 
         T currentElement = preOrder.get(preIndex);
-
-        if ((comparator.compare(currentElement, maxValue) <= 0) && (comparator.compare(currentElement, minValue) >= 0)) {
+        if ((currentElement.compareTo(maxValue) <= 0) && (currentElement.compareTo(minValue) >= 0)) {
             BinaryTreeNode<T> root = new BinaryTreeNode<>(preOrder.get(preIndex++));
 
             if (preIndex < preOrder.size()) {
                 //Construct the left subtree
-                root.setLeft(constructTreeUsingPreOrder(preOrder, currentElement, minValue, comparator));
+                root.setLeft(constructTreeUsingPreOrder(preOrder, currentElement, minValue));
             }
 
             if (preIndex < preOrder.size()) {
                 //Construct the right subtree
-                root.setRight(constructTreeUsingPreOrder(preOrder, maxValue, currentElement, comparator));
+                root.setRight(constructTreeUsingPreOrder(preOrder, maxValue, currentElement));
             }
 
             return root;
@@ -53,14 +51,13 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
         return null;
     }
 
-    public BinarySearchTree(BinaryTree<T> binaryTree, Comparator<T> comparator) {
-
-        this.root = convertFromBinaryTreeToBST(binaryTree, comparator);
+    public BinarySearchTree(BinaryTree<T> binaryTree) {
+        this.root = convertFromBinaryTreeToBST(binaryTree);
     }
 
-    private BinaryTreeNode<T> convertFromBinaryTreeToBST(BinaryTree<T> binaryTree, Comparator<T> comparator) {
+    private BinaryTreeNode<T> convertFromBinaryTreeToBST(BinaryTree<T> binaryTree) {
         List<T> binaryTreeInOrder = binaryTree.getTreeRepresentation("inorder");
-        binaryTreeInOrder.sort(comparator);
+        Collections.sort(binaryTreeInOrder);
         inOrderIndexToConvertToBST = 0;
         convertToBST(binaryTree.getRoot(), binaryTreeInOrder);
         return binaryTree.getRoot();
@@ -75,4 +72,50 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
             convertToBST(root.getRight(), binaryTreeInOrder);
         }
     }
+    
+    public BinaryTreeNode<T> findKey(T key) {
+        return findKeyRecursively(this.root, key);
+    }
+
+    private BinaryTreeNode<T> findKeyRecursively(BinaryTreeNode<T> root, T key) {
+        if (root == null) {
+            return null;
+        }
+
+        if (key.compareTo(root.getValue()) == 0) {
+            return root;
+        }
+
+        if (key.compareTo(root.getValue()) < 0) {
+            return findKeyRecursively(root.getLeft(), key);
+        }
+
+        if (key.compareTo(root.getValue()) > 0) {
+            return findKeyRecursively(root.getRight(), key);
+        }
+
+        return null;
+    }
+
+    public void insertKey(T key) {
+        insertKeyRecursively(key, this.root);
+    }
+
+    private void insertKeyRecursively(T key, BinaryTreeNode<T> node) {
+        if (key.compareTo(node.getValue()) < 0) {
+            if (node.getLeft() == null) {
+                node.setLeft(new BinaryTreeNode<>(key));
+            } else {
+                insertKeyRecursively(key, node.getLeft());
+            }
+        }
+        if (key.compareTo(node.getValue()) > 0) {
+            if (node.getRight() == null) {
+                node.setRight(new BinaryTreeNode<>(key));
+            } else {
+                insertKeyRecursively(key, node.getRight());
+            }
+        }
+    }
+
 }
