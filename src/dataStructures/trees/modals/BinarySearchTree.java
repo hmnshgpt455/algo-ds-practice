@@ -26,6 +26,10 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
         this.root = constructTreeUsingPreOrder(preOrder, max, min);
     }
 
+    public BinarySearchTree() {
+
+    }
+
     private BinaryTreeNode<T> constructTreeUsingPreOrder(List<T> preOrder, T maxValue, T minValue) {
         if (preIndex >= preOrder.size()) {
             return null;
@@ -97,8 +101,13 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
         return null;
     }
 
-    public void insertKey(T key) {
+    @Override
+    public BinarySearchTree<T> insertKey(T key) {
+        if (this.root == null) {
+            this.root = new BinaryTreeNode<>();
+        }
         insertKeyRecursively(key, this.root);
+        return this;
     }
 
     private void insertKeyRecursively(T key, BinaryTreeNode<T> node) {

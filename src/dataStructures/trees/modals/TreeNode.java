@@ -1,4 +1,4 @@
 package dataStructures.trees.modals;
 
-public interface TreeNode {
+public interface TreeNode<T> {
 }

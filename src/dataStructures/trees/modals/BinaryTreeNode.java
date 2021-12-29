@@ -1,10 +1,10 @@
 package dataStructures.trees.modals;
 
-public class BinaryTreeNode<T> implements TreeNode {
+public class BinaryTreeNode<T> implements TreeNode<T> {
 
     private BinaryTreeNode<T> right;
     private BinaryTreeNode<T> left;
-    private T value;
+    protected T value;
 
     public BinaryTreeNode(BinaryTreeNode<T> right, BinaryTreeNode<T> left, T value) {
         this.right = right;

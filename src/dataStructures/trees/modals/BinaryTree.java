@@ -5,7 +5,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class BinaryTree<T> implements Tree {
+public class BinaryTree<T> implements Tree<T> {
 
     protected BinaryTreeNode<T> root;
 
@@ -185,4 +185,8 @@ public class BinaryTree<T> implements Tree {
         }
     }
 
+    @Override
+    public Tree<T> insertKey(T key) {
+        return null;
+    }
 }
