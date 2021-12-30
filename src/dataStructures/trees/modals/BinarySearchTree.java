@@ -3,6 +3,8 @@ package dataStructures.trees.modals;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 
 public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTree<T> {
 
@@ -108,6 +110,55 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
         }
         insertKeyRecursively(key, this.root);
         return this;
+    }
+
+    public BinarySearchTree<T> deleteKey(T key) {
+        this.root = deleteKeyRecursively(key, this.root);
+        return this;
+    }
+
+    private BinaryTreeNode<T> deleteKeyRecursively(T key, BinaryTreeNode<T> node) {
+
+        if (node == null) {
+            return null;
+        }
+
+        if (node.getValue().compareTo(key) == 0) {
+            if (node.getLeft() == null && node.getRight() == null) {
+                return null;
+            }
+
+            if (node.getRight() == null) {
+                node.setValue(node.getLeft().getValue());
+                node.setLeft(null);
+                return node;
+            }
+
+            if (node.getRight() != null && node.getLeft() == null) {
+                node.setValue(node.getRight().getValue());
+                node.setRight(null);
+                return node;
+            }
+
+            T inOrderSuccessorValue = findInOrderSuccessor(node.getRight());
+            node.setValue(inOrderSuccessorValue);
+            node.setRight(deleteKeyRecursively(inOrderSuccessorValue, node.getRight()));
+            return node;
+        }
+
+        if (node.getValue().compareTo(key) < 0) {
+            node.setRight(deleteKeyRecursively(key, node.getRight()));
+        }
+
+        if (node.getValue().compareTo(key) > 0) {
+            node.setLeft(deleteKeyRecursively(key, node.getLeft()));
+        }
+
+        return node;
+    }
+
+    private T findInOrderSuccessor(BinaryTreeNode<T> node) {
+        return Optional.ofNullable(node.getLeft()).map(this::findInOrderSuccessor).orElse(node.getValue());
     }
 
     private void insertKeyRecursively(T key, BinaryTreeNode<T> node) {

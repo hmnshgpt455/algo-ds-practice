@@ -2,13 +2,16 @@ package dataStructures.trees.driverClasses.binarySearchTree;
 
 import dataStructures.trees.modals.BinarySearchTree;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class ConstructBSTFromPreOrderRepresentation {
     public static void main(String[] args) {
-        List<Integer> preOrderRepresentation = DriverHelper.getPreOrderRepresentationInput();
+        //List<Integer> preOrderRepresentation = DriverHelper.getPreOrderRepresentationInput();
+        List<Integer> preOrderRepresentation = new ArrayList<>(List.of(30, 20, 10, 25, 60, 50, 40, 55, 110, 100, 120));
         int n = preOrderRepresentation.size();
         BinarySearchTree<Integer> createdBst = new BinarySearchTree<>(preOrderRepresentation);
         List<Integer> createdBstPreOrderRepresentation = createdBst.getTreeRepresentation("preorder");

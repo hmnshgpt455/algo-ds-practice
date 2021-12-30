@@ -29,6 +29,20 @@ public class AVLTree<T extends Comparable<? super T>> extends BinarySearchTree<T
         return this;
     }
 
+    public AVLTree<T> deleteKey(T key) {
+        this.root = deleteKeyRecursively(key, this.root);
+
+        return this;
+    }
+
+    private AVLTreeNode<T> deleteKeyRecursively(T key, AVLTreeNode<T> root) {
+        if (root.getValue().compareTo(key) == 0) {
+
+        }
+
+        return null;
+    }
+
     private AVLTreeNode<T> insertKeyRecursively(T key, AVLTreeNode<T> node) {
 
         if (node == null) {
