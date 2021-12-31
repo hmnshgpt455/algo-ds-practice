@@ -124,22 +124,27 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
         }
 
         if (node.getValue().compareTo(key) == 0) {
+
+            //Leaf node
             if (node.getLeft() == null && node.getRight() == null) {
                 return null;
             }
 
+            //Only Left child present
             if (node.getRight() == null) {
                 node.setValue(node.getLeft().getValue());
                 node.setLeft(null);
                 return node;
             }
 
-            if (node.getRight() != null && node.getLeft() == null) {
+            //Only Right child present
+            if (node.getLeft() == null) {
                 node.setValue(node.getRight().getValue());
                 node.setRight(null);
                 return node;
             }
 
+            //Both children present
             T inOrderSuccessorValue = findInOrderSuccessor(node.getRight());
             node.setValue(inOrderSuccessorValue);
             node.setRight(deleteKeyRecursively(inOrderSuccessorValue, node.getRight()));
@@ -157,7 +162,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
         return node;
     }
 
-    private T findInOrderSuccessor(BinaryTreeNode<T> node) {
+    protected T findInOrderSuccessor(BinaryTreeNode<T> node) {
         return Optional.ofNullable(node.getLeft()).map(this::findInOrderSuccessor).orElse(node.getValue());
     }
 

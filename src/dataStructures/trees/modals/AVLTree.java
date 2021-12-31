@@ -35,12 +35,53 @@ public class AVLTree<T extends Comparable<? super T>> extends BinarySearchTree<T
         return this;
     }
 
-    private AVLTreeNode<T> deleteKeyRecursively(T key, AVLTreeNode<T> root) {
-        if (root.getValue().compareTo(key) == 0) {
+    private AVLTreeNode<T> deleteKeyRecursively(T key, AVLTreeNode<T> node) {
 
+        if (node == null) {
+            return null;
         }
 
-        return null;
+        if (key.compareTo(node.getValue()) < 0) {
+            node.setLeft(deleteKeyRecursively(key, node.getLeft()));
+            return node;
+        }
+
+        if (key.compareTo(node.getValue()) > 0) {
+            node.setRight(deleteKeyRecursively(key, node.getRight()));
+            return node;
+        }
+
+        if (node.getValue().compareTo(key) == 0) {
+            //Leaf node
+            if (node.getLeft() == null && node.getRight() == null) {
+                return null;
+            }
+
+            //Both children present
+            if (node.getLeft() != null && node.getRight() != null) {
+                T inOrderSuccessorValue = findInOrderSuccessor(node.getRight());
+                node.setValue(inOrderSuccessorValue);
+                node.setRight(deleteKeyRecursively(inOrderSuccessorValue, node.getRight()));
+                return node;
+            }
+
+            //Only right child present
+            Optional.ofNullable(node.getRight()).ifPresent(right -> {
+                node.setValue(right.getValue());
+                node.setRight(null);
+            });
+
+            //Only left child is present
+            Optional.ofNullable(node.getLeft()).ifPresent(left -> {
+                node.setValue(left.getValue());
+                node.setLeft(null);
+            });
+
+            node.setHeight(getHeight(node));
+            return balanceTheNodeIfUnbalanced(node, key);
+        }
+
+        return  null;
     }
 
     private AVLTreeNode<T> insertKeyRecursively(T key, AVLTreeNode<T> node) {
@@ -83,22 +124,20 @@ public class AVLTree<T extends Comparable<? super T>> extends BinarySearchTree<T
             //It means it can be Left-Right or Left-Left scenario
             if (node.getLeft().getValue().compareTo(key) > 0) {
                 //left-left case
-                return doRightRotation(node);
             } else {
                 //Left-right case
                 node.setLeft(doLeftRotation(node.getLeft())); //Set the updated left, because the previous connection is broken. Check the rotation to understand better
-                return doRightRotation(node);
             }
+            return doRightRotation(node);
         } else if (balanceFactor < -1) {
             //It is either right-right case or right-left case
             if (node.getRight().getValue().compareTo(key) < 0) {
                 //Right-right case
-                return doLeftRotation(node);
             } else {
                 //Right-left case
                 node.setRight(doRightRotation(node.getRight()));
-                return doLeftRotation(node);
             }
+            return doLeftRotation(node);
         }
 
         return node;
