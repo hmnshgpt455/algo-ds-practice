@@ -1,7 +1,5 @@
 package dataStructures.trees.modals;
 
-
-public interface Tree<T> {
-
-    Tree<T> insertKey(T key);
+public interface Tree<T, G> {
+    T insertKey(G key);
 }

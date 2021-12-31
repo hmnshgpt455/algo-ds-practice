@@ -1,15 +1,18 @@
 package dataStructures.trees.modals;
 
+import dataStructures.trees.driverClasses.utils.BinaryTreeUtil;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTree<T> {
 
     private int preIndex;
     private int inOrderIndexToConvertToBST;
+
+    private final BinaryTreeUtil<BinarySearchTree<T>, BinaryTreeNode<T>, T> binaryTreeUtil = new BinaryTreeUtil<>();
 
     public BinarySearchTree(List<T> preOrder) {
         preIndex = 0;
@@ -62,7 +65,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
     }
 
     private BinaryTreeNode<T> convertFromBinaryTreeToBST(BinaryTree<T> binaryTree) {
-        List<T> binaryTreeInOrder = binaryTree.getTreeRepresentation("inorder");
+        List<T> binaryTreeInOrder = binaryTreeUtil.getTreeRepresentation("inorder", binaryTree);
         Collections.sort(binaryTreeInOrder);
         inOrderIndexToConvertToBST = 0;
         convertToBST(binaryTree.getRoot(), binaryTreeInOrder);

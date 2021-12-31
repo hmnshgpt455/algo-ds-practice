@@ -2,9 +2,7 @@ package dataStructures.trees.modals;
 
 import java.util.Optional;
 
-public class AVLTree<T extends Comparable<? super T>> extends BinarySearchTree<T> {
-
-    private AVLTreeNode<T> root;
+public class AVLTree<T extends Comparable<? super T>> extends AbstractTree<AVLTreeNode<T>, AVLTree<T>, T> {
 
     public AVLTree() {
         super();
@@ -82,6 +80,10 @@ public class AVLTree<T extends Comparable<? super T>> extends BinarySearchTree<T
         }
 
         return  null;
+    }
+
+    private T findInOrderSuccessor(AVLTreeNode<T> node) {
+        return Optional.ofNullable(node.getLeft()).map(this::findInOrderSuccessor).orElse(node.getValue());
     }
 
     private AVLTreeNode<T> insertKeyRecursively(T key, AVLTreeNode<T> node) {
