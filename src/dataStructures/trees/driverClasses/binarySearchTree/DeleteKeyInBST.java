@@ -1,6 +1,8 @@
 package dataStructures.trees.driverClasses.binarySearchTree;
 
+import dataStructures.trees.driverClasses.utils.BinaryTreeUtil;
 import dataStructures.trees.modals.BinarySearchTree;
+import dataStructures.trees.modals.BinaryTreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,8 @@ public class DeleteKeyInBST {
     public static void main(String[] args) {
         List<Integer> preOrderRepresentation = new ArrayList<>(List.of(30, 20, 10, 25, 60, 50, 40, 55, 110, 100, 120));
         int n = preOrderRepresentation.size();
+
+        final BinaryTreeUtil<BinaryTreeNode<Integer>, Integer> binaryTreeUtil = new BinaryTreeUtil<>();
 
         BinarySearchTree<Integer> createdBst = new BinarySearchTree<>(preOrderRepresentation);
         createdBst.deleteKey(120)
@@ -30,6 +34,6 @@ public class DeleteKeyInBST {
 //        //Case 3 : Deleting node with 2 children
 //        System.out.println("After case 3");
 //        createdBst.deleteKey(30);
-        createdBst.getTreeRepresentation("preorder").forEach(el -> System.out.print(el + " "));
+        binaryTreeUtil.getInOrderTraversal(createdBst).forEach(el -> System.out.print(el + " "));
     }
 }

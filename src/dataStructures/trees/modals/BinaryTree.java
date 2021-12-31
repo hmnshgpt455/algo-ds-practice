@@ -1,13 +1,13 @@
 package dataStructures.trees.modals;
 
+import dataStructures.trees.driverClasses.abstraction.AbstractTree;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class BinaryTree<T> implements Tree<T> {
-
-    protected BinaryTreeNode<T> root;
+public class BinaryTree<T> extends AbstractTree<BinaryTreeNode<T>, BinaryTree<T>, T> {
 
     public BinaryTree(BinaryTreeNode<T> root) {
         this.root = root;
@@ -21,28 +21,8 @@ public class BinaryTree<T> implements Tree<T> {
         this.root = null;
     }
 
-    public BinaryTreeNode<T> getRoot() {
-        return root;
-    }
 
     private int preIndex = 0;
-
-    public List<T> getTreeRepresentation(String traversalType) {
-        List<T> inOrderRepresentation = new ArrayList<>();
-        switch (traversalType) {
-            case "inorder":
-                inOrderTraversal(inOrderRepresentation, this.getRoot());
-                break;
-            case "preorder":
-                preOrderTraversal(inOrderRepresentation, this.getRoot());
-                break;
-            case "postorder":
-                postOrderTraversal(inOrderRepresentation, this.getRoot());
-                break;
-        }
-
-        return inOrderRepresentation;
-    }
 
     public BinaryTree(TreeLinkedList<T> linkedList) {
         this.root = createTreeFromLinkedList(linkedList);
@@ -140,53 +120,8 @@ public class BinaryTree<T> implements Tree<T> {
         return root;
     }
 
-    private void postOrderTraversal(List<T> representation, BinaryTreeNode<T> root) {
-        Optional.ofNullable(root).ifPresent(r -> {
-            Optional.ofNullable(root.getLeft()).ifPresent(left -> postOrderTraversal(representation, left));
-            Optional.ofNullable(root.getRight()).ifPresent(right -> postOrderTraversal(representation, right));
-            Optional.ofNullable(root.getValue()).ifPresent(representation::add);
-        });
-    }
-
-    private void preOrderTraversal(List<T> representation, BinaryTreeNode<T> root) {
-        Optional.ofNullable(root).ifPresent(r -> {
-            Optional.ofNullable(root.getValue()).ifPresent(representation::add);
-            Optional.ofNullable(root.getLeft()).ifPresent(left -> preOrderTraversal(representation, left));
-            Optional.ofNullable(root.getRight()).ifPresent(right -> preOrderTraversal(representation, right));
-        });
-    }
-
-    private void inOrderTraversal(List<T> representation, BinaryTreeNode<T> root) {
-        Optional.ofNullable(root).ifPresent(r -> {
-            Optional.ofNullable(root.getLeft()).ifPresent(left -> inOrderTraversal(representation, left));
-            Optional.ofNullable(root.getValue()).ifPresent(representation::add);
-            Optional.ofNullable(root.getRight()).ifPresent(right -> inOrderTraversal(representation, right));
-        });
-    }
-
-    public List<T> getLevelOrderTraversal() {
-        List<T> levelOrderRepresentation = new ArrayList<>();
-        Queue<BinaryTreeNode<T>> levelOrderQueue = new LinkedList<>();
-        levelOrderQueue.add(this.getRoot());
-        levelOrderTraversal(levelOrderQueue, levelOrderRepresentation);
-
-        return levelOrderRepresentation;
-    }
-
-    private void levelOrderTraversal(Queue<BinaryTreeNode<T>> nodeQueue, List<T> levelOrderRepresentation) {
-        if (!nodeQueue.isEmpty()) {
-            BinaryTreeNode<T> currentNode = nodeQueue.poll();
-
-            levelOrderRepresentation.add(currentNode.getValue());
-
-            Optional.ofNullable(currentNode.getLeft()).ifPresent(nodeQueue::add);
-            Optional.ofNullable(currentNode.getRight()).ifPresent(nodeQueue::add);
-            levelOrderTraversal(nodeQueue, levelOrderRepresentation);
-        }
-    }
-
     @Override
-    public Tree<T> insertKey(T key) {
+    public BinaryTree<T> insertKey(T key) {
         return null;
     }
 }

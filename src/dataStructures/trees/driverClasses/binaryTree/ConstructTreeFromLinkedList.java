@@ -1,6 +1,8 @@
 package dataStructures.trees.driverClasses.binaryTree;
 
+import dataStructures.trees.driverClasses.utils.BinaryTreeUtil;
 import dataStructures.trees.modals.BinaryTree;
+import dataStructures.trees.modals.BinaryTreeNode;
 import dataStructures.trees.modals.TreeLinkedList;
 
 import java.util.Scanner;
@@ -9,6 +11,7 @@ public class ConstructTreeFromLinkedList {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
+        final BinaryTreeUtil<BinaryTreeNode<Integer>, Integer> binaryTreeUtil = new BinaryTreeUtil<>();
 
         TreeLinkedList<Integer> linkedList = new TreeLinkedList<>();
 
@@ -19,6 +22,6 @@ public class ConstructTreeFromLinkedList {
 
         BinaryTree<Integer> binaryTree = new BinaryTree<>(linkedList);
         System.out.println("Level order of created tree : ");
-        binaryTree.getLevelOrderTraversal().forEach(el -> System.out.print(el + " "));
+        binaryTreeUtil.getLevelOrderTraversal(binaryTree.getRoot()).forEach(el -> System.out.print(el + " "));
     }
 }
