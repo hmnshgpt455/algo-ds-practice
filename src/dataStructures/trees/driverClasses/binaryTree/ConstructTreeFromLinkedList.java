@@ -1,7 +1,6 @@
 package dataStructures.trees.driverClasses.binaryTree;
 
 import dataStructures.trees.driverClasses.utils.BinaryTreeUtil;
-import dataStructures.trees.modals.BinarySearchTree;
 import dataStructures.trees.modals.BinaryTree;
 import dataStructures.trees.modals.BinaryTreeNode;
 import dataStructures.trees.modals.TreeLinkedList;
@@ -12,7 +11,7 @@ public class ConstructTreeFromLinkedList {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
-        final BinaryTreeUtil<BinaryTree<Integer>, BinaryTreeNode<Integer>, Integer> binaryTreeUtil = new BinaryTreeUtil<>();
+        final BinaryTreeUtil<BinaryTreeNode<Integer>, Integer> binaryTreeUtil = new BinaryTreeUtil<>();
 
         TreeLinkedList<Integer> linkedList = new TreeLinkedList<>();
 

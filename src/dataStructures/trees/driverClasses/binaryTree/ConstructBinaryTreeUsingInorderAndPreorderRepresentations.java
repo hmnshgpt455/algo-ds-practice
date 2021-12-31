@@ -1,7 +1,6 @@
 package dataStructures.trees.driverClasses.binaryTree;
 
 import dataStructures.trees.driverClasses.utils.BinaryTreeUtil;
-import dataStructures.trees.modals.BinarySearchTree;
 import dataStructures.trees.modals.BinaryTree;
 import dataStructures.trees.modals.BinaryTreeNode;
 
@@ -13,14 +12,14 @@ public class ConstructBinaryTreeUsingInorderAndPreorderRepresentations {
         Scanner sc = new Scanner(System.in);
         String inOrder = sc.next();
         String preOrder = sc.next();
-        final BinaryTreeUtil<BinaryTree<Character>, BinaryTreeNode<Character>, Character> binaryTreeUtil = new BinaryTreeUtil<>();
+        final BinaryTreeUtil<BinaryTreeNode<Character>, Character> binaryTreeUtil = new BinaryTreeUtil<>();
 
         BinaryTree<Character> createdBinaryTree = new BinaryTree<>(inOrder, preOrder, null);
 
-        String newInOrder = binaryTreeUtil.getTreeRepresentation("inorder", createdBinaryTree)
+        String newInOrder = binaryTreeUtil.getInOrderTraversal(createdBinaryTree)
                 .stream().reduce("", (resultString, node) -> resultString + node, String::concat);
 
-        String newPreOrder = binaryTreeUtil.getTreeRepresentation("preorder", createdBinaryTree)
+        String newPreOrder = binaryTreeUtil.getPreOrderTraversal(createdBinaryTree)
                 .stream().reduce("", (resultString, node) -> resultString + node, String::concat);
 
         if (inOrder.equals(newInOrder)) {

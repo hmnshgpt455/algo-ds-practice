@@ -1,5 +1,7 @@
 package dataStructures.trees.modals;
 
+import dataStructures.trees.driverClasses.abstraction.AbstractBinaryTreeNode;
+
 public class AVLTreeNode<T extends Comparable<? super T>> extends AbstractBinaryTreeNode<T, AVLTreeNode<T>> {
 
     private int height;

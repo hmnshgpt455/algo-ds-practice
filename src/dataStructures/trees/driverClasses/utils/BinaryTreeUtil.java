@@ -1,47 +1,64 @@
 package dataStructures.trees.driverClasses.utils;
 
-import dataStructures.trees.modals.AbstractBinaryTreeNode;
-import dataStructures.trees.modals.AbstractTree;
+import dataStructures.trees.driverClasses.abstraction.AbstractBinaryTreeNode;
+import dataStructures.trees.driverClasses.abstraction.AbstractTree;
 
 import java.util.*;
 
-public class BinaryTreeUtil<V extends
-        AbstractTree<G, ? super V, T>, G extends AbstractBinaryTreeNode<T, G>, T> {
+public class BinaryTreeUtil<G extends AbstractBinaryTreeNode<T, G>, T> {
 
-     public List<T> getTreeRepresentation(String traversalType, AbstractTree<G, ?, T> tree) {
-        List<T> inOrderRepresentation = new ArrayList<>();
-        switch (traversalType) {
-            case "inorder":
-                inOrderTraversal(inOrderRepresentation, tree.getRoot());
-                break;
-            case "preorder":
-                preOrderTraversal(inOrderRepresentation, tree.getRoot());
-                break;
-            case "postorder":
-                postOrderTraversal(inOrderRepresentation, tree.getRoot());
-                break;
-        }
+//     public List<T> getTreeRepresentation(String traversalType, AbstractTree<G, ?, T> tree) {
+//        List<T> inOrderRepresentation = new ArrayList<>();
+//        switch (traversalType) {
+//            case "inorder":
+//                getInOrderTraversal(inOrderRepresentation, tree.getRoot());
+//                break;
+//            case "preorder":
+//                getPreOrderTraversal(inOrderRepresentation, tree.getRoot());
+//                break;
+//            case "postorder":
+//                getPostOrderTraversal(inOrderRepresentation, tree.getRoot());
+//                break;
+//        }
+//
+//        return inOrderRepresentation;
+//    }
 
-        return inOrderRepresentation;
+    public List<T> getPostOrderTraversal(AbstractTree<G, ?, T> tree) {
+        List<T> representation = new ArrayList<>();
+        postOrderTraversal(tree.getRoot(), representation);
+        return representation;
     }
 
-    private void postOrderTraversal(List<T> representation, G root) {
+    private void postOrderTraversal(G root, List<T> representation) {
         Optional.ofNullable(root).ifPresent(r -> {
-            Optional.ofNullable(root.getLeft()).ifPresent(left -> postOrderTraversal(representation, left));
-            Optional.ofNullable(root.getRight()).ifPresent(right -> postOrderTraversal(representation, right));
+            Optional.ofNullable(root.getLeft()).ifPresent(left -> postOrderTraversal(left, representation));
+            Optional.ofNullable(root.getRight()).ifPresent(right -> postOrderTraversal(right, representation));
             Optional.ofNullable(root.getValue()).ifPresent(representation::add);
         });
     }
 
-    private void preOrderTraversal(List<T> representation, G root) {
+    public List<T> getPreOrderTraversal(AbstractTree<G, ?, T> tree) {
+        List<T> representation = new ArrayList<>();
+        preOrderTraversal(tree.getRoot(), representation);
+        return representation;
+    }
+
+    private void preOrderTraversal(G root, List<T> representation) {
         Optional.ofNullable(root).ifPresent(r -> {
             Optional.ofNullable(root.getValue()).ifPresent(representation::add);
-            Optional.ofNullable(root.getLeft()).ifPresent(left -> preOrderTraversal(representation, left));
-            Optional.ofNullable(root.getRight()).ifPresent(right -> preOrderTraversal(representation, right));
+            Optional.ofNullable(root.getLeft()).ifPresent(left -> preOrderTraversal(left, representation));
+            Optional.ofNullable(root.getRight()).ifPresent(right -> preOrderTraversal(right, representation));
         });
     }
 
-    private  void inOrderTraversal(List<T> representation, G root) {
+    public List<T> getInOrderTraversal(AbstractTree<G, ?, T> tree) {
+        List<T> representation = new ArrayList<>();
+        inOrderTraversal(representation, tree.getRoot());
+        return representation;
+    }
+
+    private void inOrderTraversal(List<T> representation, G root) {
         Optional.ofNullable(root).ifPresent(r -> {
             Optional.ofNullable(root.getLeft()).ifPresent(left -> inOrderTraversal(representation, left));
             Optional.ofNullable(root.getValue()).ifPresent(representation::add);
