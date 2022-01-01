@@ -5,7 +5,7 @@ import dataStructures.trees.modals.trees.nodes.AVLTreeNode;
 
 import java.util.Optional;
 
-public class AVLTree<T extends Comparable<? super T>> extends AbstractTree<AVLTreeNode<T>, AVLTree<T>, T> {
+public class AVLTree<T extends Comparable<? super T>> extends AbstractTree<AVLTreeNode<T>, T> {
 
     public AVLTree() {
         super();
