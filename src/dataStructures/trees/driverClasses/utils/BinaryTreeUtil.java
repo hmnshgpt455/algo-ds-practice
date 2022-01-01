@@ -1,7 +1,7 @@
 package dataStructures.trees.driverClasses.utils;
 
-import dataStructures.trees.abstraction.AbstractBinaryTreeNode;
-import dataStructures.trees.abstraction.AbstractTree;
+import dataStructures.trees.abstraction.trees.AbstractBinaryTreeNode;
+import dataStructures.trees.abstraction.trees.AbstractTree;
 
 import java.util.*;
 

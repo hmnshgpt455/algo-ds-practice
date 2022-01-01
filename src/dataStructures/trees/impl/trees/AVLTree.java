@@ -1,6 +1,6 @@
 package dataStructures.trees.impl.trees;
 
-import dataStructures.trees.abstraction.AbstractTree;
+import dataStructures.trees.abstraction.trees.AbstractTree;
 import dataStructures.trees.modals.trees.nodes.AVLTreeNode;
 
 import java.util.Optional;

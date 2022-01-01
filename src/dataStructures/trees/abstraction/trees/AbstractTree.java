@@ -1,4 +1,4 @@
-package dataStructures.trees.abstraction;
+package dataStructures.trees.abstraction.trees;
 
 
 public abstract class AbstractTree<T, V>  implements Tree<V> {

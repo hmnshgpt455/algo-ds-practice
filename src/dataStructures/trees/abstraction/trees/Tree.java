@@ -1,4 +1,4 @@
-package dataStructures.trees.abstraction;
+package dataStructures.trees.abstraction.trees;
 
 public interface Tree<V> {
 
