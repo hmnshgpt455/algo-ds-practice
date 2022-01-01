@@ -10,14 +10,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class BinaryTree<T> extends AbstractTree<BinaryTreeNode<T>, BinaryTree<T>, T> {
+public class BinaryTree<T> extends AbstractTree<BinaryTreeNode<T>, T> {
 
     public BinaryTree(BinaryTreeNode<T> root) {
         this.root = root;
     }
 
     public BinaryTree(T value) {
-        this.root = new BinaryTreeNode<T>(value);
+        this.root = new BinaryTreeNode<>(value);
     }
 
     public BinaryTree() {
@@ -75,11 +75,11 @@ public class BinaryTree<T> extends AbstractTree<BinaryTreeNode<T>, BinaryTree<T>
                             levelQueue.add(new BinaryTreeNode<>(levelOrder.get(0)));
                             convertToBinaryTreeUsingLevelOrderAndInorder(elementsToIndexMapForInorder, elementsToIndexMapForLevelOrder,
                                     0, inOrder.size()-1, 0, levelQueue, inOrder, levelOrder);
-                            return new BinaryTreeNode<Integer>(1);
+                            return new BinaryTreeNode<>(1);
                         })).orElse(null);
     }
 
-    private BinaryTreeNode convertToBinaryTreeUsingLevelOrderAndInorder(HashMap<T, Integer> elementsToIndexMapForInorder,
+    private BinaryTreeNode<T> convertToBinaryTreeUsingLevelOrderAndInorder(HashMap<T, Integer> elementsToIndexMapForInorder,
                                                                         HashMap<T, Integer> elementsToIndexMapForLevelOrder,
                                                                         int startIndex, int endIndex, int numberOfSiblingsToTheRight,
                                                                         Queue<BinaryTreeNode<T>> levelQueue, List<T> inOrder,

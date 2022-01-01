@@ -7,24 +7,7 @@ import java.util.*;
 
 public class BinaryTreeUtil<G extends AbstractBinaryTreeNode<T, G>, T> {
 
-//     public List<T> getTreeRepresentation(String traversalType, AbstractTree<G, ?, T> tree) {
-//        List<T> inOrderRepresentation = new ArrayList<>();
-//        switch (traversalType) {
-//            case "inorder":
-//                getInOrderTraversal(inOrderRepresentation, tree.getRoot());
-//                break;
-//            case "preorder":
-//                getPreOrderTraversal(inOrderRepresentation, tree.getRoot());
-//                break;
-//            case "postorder":
-//                getPostOrderTraversal(inOrderRepresentation, tree.getRoot());
-//                break;
-//        }
-//
-//        return inOrderRepresentation;
-//    }
-
-    public List<T> getPostOrderTraversal(AbstractTree<G, ?, T> tree) {
+    public List<T> getPostOrderTraversal(AbstractTree<G, T> tree) {
         List<T> representation = new ArrayList<>();
         postOrderTraversal(tree.getRoot(), representation);
         return representation;
@@ -38,7 +21,7 @@ public class BinaryTreeUtil<G extends AbstractBinaryTreeNode<T, G>, T> {
         });
     }
 
-    public List<T> getPreOrderTraversal(AbstractTree<G, ?, T> tree) {
+    public List<T> getPreOrderTraversal(AbstractTree<G, T> tree) {
         List<T> representation = new ArrayList<>();
         preOrderTraversal(tree.getRoot(), representation);
         return representation;
@@ -52,7 +35,7 @@ public class BinaryTreeUtil<G extends AbstractBinaryTreeNode<T, G>, T> {
         });
     }
 
-    public List<T> getInOrderTraversal(AbstractTree<G, ?, T> tree) {
+    public List<T> getInOrderTraversal(AbstractTree<G, T> tree) {
         List<T> representation = new ArrayList<>();
         inOrderTraversal(representation, tree.getRoot());
         return representation;

@@ -1,8 +1,8 @@
 package dataStructures.trees.abstraction;
 
-public interface Tree<T, V> {
+public interface Tree<V> {
 
-    T insertKey(V key);
+    Tree<V> insertKey(V key);
 
-    T deleteKey(V key);
+    Tree<V> deleteKey(V key);
 }
