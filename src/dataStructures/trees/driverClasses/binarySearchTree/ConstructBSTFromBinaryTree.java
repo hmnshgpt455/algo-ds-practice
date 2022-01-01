@@ -1,9 +1,9 @@
 package dataStructures.trees.driverClasses.binarySearchTree;
 
 import dataStructures.trees.driverClasses.utils.BinaryTreeUtil;
-import dataStructures.trees.modals.BinarySearchTree;
-import dataStructures.trees.modals.BinaryTree;
-import dataStructures.trees.modals.BinaryTreeNode;
+import dataStructures.trees.impl.trees.BinarySearchTree;
+import dataStructures.trees.impl.trees.BinaryTree;
+import dataStructures.trees.modals.trees.nodes.BinaryTreeNode;
 
 import java.util.List;
 

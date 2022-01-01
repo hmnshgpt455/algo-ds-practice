@@ -1,4 +1,4 @@
-package dataStructures.trees.modals;
+package dataStructures.trees.modals.trees.nodes;
 
 public class ListNode<T> {
     private T data;

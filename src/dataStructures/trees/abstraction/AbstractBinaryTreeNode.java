@@ -1,4 +1,4 @@
-package dataStructures.trees.driverClasses.abstraction;
+package dataStructures.trees.abstraction;
 
 public abstract class AbstractBinaryTreeNode<T, N extends AbstractBinaryTreeNode<T, N>> {
     protected N left;

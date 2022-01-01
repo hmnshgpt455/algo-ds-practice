@@ -1,4 +1,6 @@
-package dataStructures.trees.modals;
+package dataStructures.trees.modals.trees.common;
+
+import dataStructures.trees.modals.trees.nodes.ListNode;
 
 public class TreeLinkedList<T> {
 

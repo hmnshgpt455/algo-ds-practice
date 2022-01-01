@@ -1,6 +1,7 @@
-package dataStructures.trees.modals;
+package dataStructures.trees.impl.trees;
 
 import dataStructures.trees.driverClasses.utils.BinaryTreeUtil;
+import dataStructures.trees.modals.trees.nodes.BinaryTreeNode;
 
 import java.util.Collections;
 import java.util.List;
@@ -115,6 +116,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
         return this;
     }
 
+    @Override
     public BinarySearchTree<T> deleteKey(T key) {
         this.root = deleteKeyRecursively(key, this.root);
         return this;

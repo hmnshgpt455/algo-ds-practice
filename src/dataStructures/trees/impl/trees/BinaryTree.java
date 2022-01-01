@@ -1,6 +1,9 @@
-package dataStructures.trees.modals;
+package dataStructures.trees.impl.trees;
 
-import dataStructures.trees.driverClasses.abstraction.AbstractTree;
+import dataStructures.trees.abstraction.AbstractTree;
+import dataStructures.trees.modals.trees.nodes.BinaryTreeNode;
+import dataStructures.trees.modals.trees.nodes.ListNode;
+import dataStructures.trees.modals.trees.common.TreeLinkedList;
 
 import java.util.*;
 import java.util.function.Function;
@@ -122,6 +125,11 @@ public class BinaryTree<T> extends AbstractTree<BinaryTreeNode<T>, BinaryTree<T>
 
     @Override
     public BinaryTree<T> insertKey(T key) {
+        return null;
+    }
+
+    @Override
+    public BinaryTree<T> deleteKey(T key) {
         return null;
     }
 }

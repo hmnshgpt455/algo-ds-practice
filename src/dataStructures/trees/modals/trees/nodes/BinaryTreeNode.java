@@ -1,6 +1,6 @@
-package dataStructures.trees.modals;
+package dataStructures.trees.modals.trees.nodes;
 
-import dataStructures.trees.driverClasses.abstraction.AbstractBinaryTreeNode;
+import dataStructures.trees.abstraction.AbstractBinaryTreeNode;
 
 public class BinaryTreeNode<T> extends AbstractBinaryTreeNode<T, BinaryTreeNode<T>> {
 

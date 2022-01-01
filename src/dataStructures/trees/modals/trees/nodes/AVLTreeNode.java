@@ -1,6 +1,6 @@
-package dataStructures.trees.modals;
+package dataStructures.trees.modals.trees.nodes;
 
-import dataStructures.trees.driverClasses.abstraction.AbstractBinaryTreeNode;
+import dataStructures.trees.abstraction.AbstractBinaryTreeNode;
 
 public class AVLTreeNode<T extends Comparable<? super T>> extends AbstractBinaryTreeNode<T, AVLTreeNode<T>> {
 
