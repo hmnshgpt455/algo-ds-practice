@@ -1,17 +1,17 @@
 package dataStructures.trees.driverClasses.graphs;
 
 import dataStructures.trees.driverClasses.utils.GraphUtil;
-import dataStructures.trees.modals.graphs.UnweightedAdjacencyListGraph;
+import dataStructures.trees.modals.graphs.UnweightedDirectedAdjacencyListGraph;
 
 public class CreateGraph {
     public static void main(String[] args) {
-        UnweightedAdjacencyListGraph<Integer> adjacencyListGraph = new UnweightedAdjacencyListGraph<>();
-        adjacencyListGraph.addDirectedEdge(0, 1)
-                .addDirectedEdge(0, 2)
-                .addDirectedEdge(1, 2)
-                .addDirectedEdge(2, 0)
-                .addDirectedEdge(2, 3)
-                .addDirectedEdge(3, 3);
+        UnweightedDirectedAdjacencyListGraph<Integer> adjacencyListGraph = new UnweightedDirectedAdjacencyListGraph<>();
+        adjacencyListGraph.addEdge(0, 1)
+                .addEdge(0, 2)
+                .addEdge(1, 2)
+                .addEdge(2, 0)
+                .addEdge(2, 3)
+                .addEdge(3, 3);
 
         GraphUtil graphUtil = new GraphUtil();
         graphUtil.printGraph(adjacencyListGraph);
