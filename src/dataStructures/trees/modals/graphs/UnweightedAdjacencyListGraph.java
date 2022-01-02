@@ -15,21 +15,31 @@ public class UnweightedAdjacencyListGraph<T> implements Graph<T> {
     }
 
     @Override
-    public Graph<T> addEdgeDirected(T u, T v) {
-        if (adjacencyList.containsKey(u)) {
-            adjacencyList.get(u).add(v);
+    public Graph<T> addDirectedEdge(T source, T destination) {
+        //In case of trivial graph, the child list will be null
+        if (adjacencyList.containsKey(source)) {
+            Optional.ofNullable(adjacencyList.get(source))
+                    .ifPresentOrElse(childList -> childList.add(destination), () -> Optional.ofNullable(destination)
+                            .ifPresent(v -> {
+                                List<T> newChildList = new ArrayList<>();
+                                newChildList.add(destination);
+                                adjacencyList.put(source, newChildList);
+                            }));
         } else {
-            List<T> edgeList = new ArrayList<>();
-            edgeList.add(v);
-            adjacencyList.put(u, edgeList);
+            Optional.ofNullable(destination).ifPresentOrElse(v -> {
+                List<T> edgeList = new ArrayList<>();
+                edgeList.add(v);
+                adjacencyList.put(source, edgeList);
+            }, () -> adjacencyList.put(source, null));
+
         }
         return this;
     }
 
     @Override
     public Graph<T> addUndirectedEdge(T u, T v) {
-        this.addEdgeDirected(u, v);
-        this.addEdgeDirected(v, u);
+        this.addDirectedEdge(u, v);
+        this.addDirectedEdge(v, u);
         return this;
     }
 
@@ -69,5 +79,42 @@ public class UnweightedAdjacencyListGraph<T> implements Graph<T> {
 
     public Map<T, List<T>> getAdjacencyList() {
         return adjacencyList;
+    }
+
+    @Override
+    public Boolean findIfGraphIsCyclic() {
+        Map<T, Boolean> visited = new HashMap<>();
+        Map<T, Boolean> recursionStack = new HashMap<>();
+
+        for(T key : this.adjacencyList.keySet()) {
+            if (isCyclic(visited, recursionStack, key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isCyclic(Map<T, Boolean> visited, Map<T, Boolean> recursionStack, T key) {
+
+        if (recursionStack.containsKey(key) && recursionStack.get(key)) {
+            return true;
+        }
+
+        if (visited.containsKey(key) && visited.get(key)) {
+            return false;
+        }
+
+        recursionStack.put(key, true);
+        visited.put(key, true);
+
+        if (adjacencyList.get(key) != null) { //This check is for trivial graph
+            for (T child : adjacencyList.get(key)) {
+                if (isCyclic(visited, recursionStack, child)) {
+                    return true;
+                }
+            }
+        }
+        recursionStack.put(key, false);
+        return false;
     }
 }

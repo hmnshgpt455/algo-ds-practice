@@ -6,12 +6,12 @@ import dataStructures.trees.modals.graphs.UnweightedAdjacencyListGraph;
 public class CreateGraph {
     public static void main(String[] args) {
         UnweightedAdjacencyListGraph<Integer> adjacencyListGraph = new UnweightedAdjacencyListGraph<>();
-        adjacencyListGraph.addEdgeDirected(0, 1)
-                .addEdgeDirected(0, 2)
-                .addEdgeDirected(1, 2)
-                .addEdgeDirected(2, 0)
-                .addEdgeDirected(2, 3)
-                .addEdgeDirected(3, 3);
+        adjacencyListGraph.addDirectedEdge(0, 1)
+                .addDirectedEdge(0, 2)
+                .addDirectedEdge(1, 2)
+                .addDirectedEdge(2, 0)
+                .addDirectedEdge(2, 3)
+                .addDirectedEdge(3, 3);
 
         GraphUtil graphUtil = new GraphUtil();
         graphUtil.printGraph(adjacencyListGraph);
