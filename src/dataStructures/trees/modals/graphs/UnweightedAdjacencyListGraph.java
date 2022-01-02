@@ -2,20 +2,20 @@ package dataStructures.trees.modals.graphs;
 
 import java.util.*;
 
-public class AdjacencyListGraph<T> implements Graph<T> {
+public class UnweightedAdjacencyListGraph<T> implements Graph<T> {
 
     private final Map<T, List<T>> adjacencyList;
 
-    public AdjacencyListGraph() {
+    public UnweightedAdjacencyListGraph() {
         adjacencyList = new HashMap<>();
     }
 
-    public AdjacencyListGraph(HashMap<T, List<T>> adjacencyList) {
+    public UnweightedAdjacencyListGraph(HashMap<T, List<T>> adjacencyList) {
         this.adjacencyList = adjacencyList;
     }
 
     @Override
-    public Graph<T> addEdge(T u, T v) {
+    public Graph<T> addEdgeDirected(T u, T v) {
         if (adjacencyList.containsKey(u)) {
             adjacencyList.get(u).add(v);
         } else {
@@ -27,9 +27,9 @@ public class AdjacencyListGraph<T> implements Graph<T> {
     }
 
     @Override
-    public Graph<T> addEdgeBidirectional(T u, T v) {
-        this.addEdge(u, v);
-        this.addEdge(v, u);
+    public Graph<T> addUndirectedEdge(T u, T v) {
+        this.addEdgeDirected(u, v);
+        this.addEdgeDirected(v, u);
         return this;
     }
 
@@ -49,6 +49,22 @@ public class AdjacencyListGraph<T> implements Graph<T> {
         }
 
         return bfsRepresentation;
+    }
+
+    @Override
+    public List<T> getDFSRepresentation(T startingNode) {
+        List<T> dfsRepresentation = new ArrayList<>();
+        Map<T, Boolean> visited = new HashMap<>();
+        dfs(dfsRepresentation, startingNode, visited);
+        return dfsRepresentation;
+    }
+
+    private void dfs(List<T> dfsRepresentation, T startingNode, Map<T, Boolean> visited) {
+        if (!visited.containsKey(startingNode) || visited.get(startingNode)) {
+            visited.put(startingNode, false);
+            this.adjacencyList.get(startingNode).forEach(node -> dfs(dfsRepresentation, node, visited));
+            dfsRepresentation.add(startingNode);
+        }
     }
 
     public Map<T, List<T>> getAdjacencyList() {
