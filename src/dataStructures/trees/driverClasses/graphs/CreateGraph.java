@@ -7,15 +7,16 @@ public class CreateGraph {
     public static void main(String[] args) {
         AdjacencyListGraph<Integer> adjacencyListGraph = new AdjacencyListGraph<>();
         adjacencyListGraph.addEdge(0, 1)
-                .addEdgeBidirectional(0, 4)
-                .addEdgeBidirectional(1, 2)
-                .addEdgeBidirectional(1, 3)
-                .addEdgeBidirectional(1, 4)
-                .addEdgeBidirectional(2, 3)
-                .addEdgeBidirectional(3, 4)
-                .addEdgeBidirectional(100, 200);
+                .addEdge(0, 2)
+                .addEdge(1, 2)
+                .addEdge(2, 0)
+                .addEdge(2, 3)
+                .addEdge(3, 3);
 
         GraphUtil graphUtil = new GraphUtil();
         graphUtil.printGraph(adjacencyListGraph);
+
+        System.out.println("BFS of the graph ");
+        adjacencyListGraph.getBFSRepresentation(2).forEach(el -> System.out.print(el+" "));
     }
 }

@@ -1,9 +1,6 @@
 package dataStructures.trees.modals.graphs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AdjacencyListGraph<T> implements Graph<T> {
 
@@ -36,6 +33,23 @@ public class AdjacencyListGraph<T> implements Graph<T> {
         return this;
     }
 
+    @Override
+    public List<T> getBFSRepresentation(T startingNode) {
+        List<T> bfsRepresentation = new ArrayList<>();
+        LinkedList<T> queue = new LinkedList<>();
+        queue.add(startingNode);
+        Map<T, Boolean> visited = new HashMap<>();
+        while (!queue.isEmpty()) {
+            T currentHead = queue.poll();
+            if (!visited.containsKey(currentHead) || !visited.get(currentHead)) {
+                visited.put(currentHead, true);
+                bfsRepresentation.add(currentHead);
+                queue.addAll(this.adjacencyList.get(currentHead));
+            }
+        }
+
+        return bfsRepresentation;
+    }
 
     public Map<T, List<T>> getAdjacencyList() {
         return adjacencyList;
