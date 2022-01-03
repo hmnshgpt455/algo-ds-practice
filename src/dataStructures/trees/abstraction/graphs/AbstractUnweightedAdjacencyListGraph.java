@@ -2,12 +2,26 @@ package dataStructures.trees.abstraction.graphs;
 
 import java.util.*;
 
-public abstract class AbstractAdjacencyListGraph<T> implements Graph<T> {
+public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Graph<T> {
 
     protected final Map<T, List<T>> adjacencyList;
 
-    public AbstractAdjacencyListGraph() {
+    public AbstractUnweightedAdjacencyListGraph() {
         this.adjacencyList = new HashMap<>();
+    }
+
+    @Override
+    public Graph<T> addEdge(T source, T destination) {
+        //In case of trivial graph, the child list will be null
+        Optional.ofNullable(adjacencyList.get(source))
+            .ifPresentOrElse(childList -> Optional.ofNullable(destination).ifPresent(childList::add),
+                    () -> Optional.ofNullable(destination)
+                            .ifPresentOrElse(v -> {
+                                List<T> newChildList = new ArrayList<>();
+                                newChildList.add(v);
+                                adjacencyList.put(source, newChildList);
+                            }, () -> adjacencyList.put(source, null)));
+        return this;
     }
 
     @Override

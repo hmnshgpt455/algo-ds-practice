@@ -11,7 +11,7 @@ public class FindIfDirectedGraphIsCyclic {
                 .addEdge(2, 4)
                 .addEdge(2, 3)
                 .addEdge(3, 4)
-                .addEdge(150, null)
+                .addEdge(150, 150)
                 .addEdge(100, -1);
 
         System.out.println("Is graph cyclic : " + graph.isCyclic());

@@ -16,8 +16,7 @@ public class FindIfUndirectedGraphIsCyclic {
                 .addEdge(3, 4);
 
         graph2.addEdge(0, 1)
-                .addEdge(2, 1)
-                        .addEdge(1, 2);
+                .addEdge(2, 1);
 
         System.out.println("Is graph cyclic : " + graph1.isCyclic());
         System.out.println("Is graph cyclic : " + graph2.isCyclic());

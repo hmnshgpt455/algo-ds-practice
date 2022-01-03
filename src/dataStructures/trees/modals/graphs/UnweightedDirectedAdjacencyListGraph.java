@@ -1,11 +1,11 @@
 package dataStructures.trees.modals.graphs;
 
-import dataStructures.trees.abstraction.graphs.AbstractAdjacencyListGraph;
+import dataStructures.trees.abstraction.graphs.AbstractUnweightedAdjacencyListGraph;
 import dataStructures.trees.abstraction.graphs.Graph;
 
 import java.util.*;
 
-public class UnweightedDirectedAdjacencyListGraph<T> extends AbstractAdjacencyListGraph<T> {
+public class UnweightedDirectedAdjacencyListGraph<T> extends AbstractUnweightedAdjacencyListGraph<T> {
 
 
     public UnweightedDirectedAdjacencyListGraph() {
@@ -15,22 +15,7 @@ public class UnweightedDirectedAdjacencyListGraph<T> extends AbstractAdjacencyLi
     @Override
     public Graph<T> addEdge(T source, T destination) {
         //In case of trivial graph, the child list will be null
-        if (adjacencyList.containsKey(source)) {
-            Optional.ofNullable(adjacencyList.get(source))
-                    .ifPresentOrElse(childList -> childList.add(destination), () -> Optional.ofNullable(destination)
-                            .ifPresent(v -> {
-                                List<T> newChildList = new ArrayList<>();
-                                newChildList.add(destination);
-                                adjacencyList.put(source, newChildList);
-                            }));
-        } else {
-            Optional.ofNullable(destination).ifPresentOrElse(v -> {
-                List<T> edgeList = new ArrayList<>();
-                edgeList.add(v);
-                adjacencyList.put(source, edgeList);
-            }, () -> adjacencyList.put(source, null));
-
-        }
+        Optional.ofNullable(source).ifPresent(u -> super.addEdge(u, destination));
         return this;
     }
 
@@ -69,5 +54,40 @@ public class UnweightedDirectedAdjacencyListGraph<T> extends AbstractAdjacencyLi
         }
         recursionStack.put(key, false);
         return false;
+    }
+
+    public Deque<T> getTopologicalSort(T startingNode) {
+        Deque<T> stack = new ArrayDeque<>();
+        Map<T, Boolean> visited = new HashMap<>();
+
+        if (this.isCyclic()) {
+            throw new UnsupportedOperationException("Cannot find topological sort of a cyclic graph");
+        } else {
+            Optional.ofNullable(startingNode).ifPresent(key -> {
+               topologicalSort(visited, stack, key);
+            });
+
+            adjacencyList.keySet().stream()
+                    .filter(key -> !visited.containsKey(key) || !visited.get(key))
+                    .forEach(key -> topologicalSort(visited, stack, key));
+        }
+
+        return stack;
+    }
+
+    public Deque<T> getTopologicalSort() {
+        return getTopologicalSort(null);
+    }
+
+    private void topologicalSort(Map<T, Boolean> visited, Deque<T> stack, T key) {
+        if (!visited.containsKey(key) || !visited.get(key)) {
+            visited.put(key, true);
+
+            Optional.ofNullable(adjacencyList.get(key))
+                    .ifPresent(children -> children.stream().filter(child -> !visited.containsKey(child))
+                    .forEach(child -> topologicalSort(visited, stack, child)));
+
+            stack.offerFirst(key);
+        }
     }
 }
