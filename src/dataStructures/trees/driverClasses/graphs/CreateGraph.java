@@ -1,7 +1,7 @@
 package dataStructures.trees.driverClasses.graphs;
 
 import dataStructures.trees.driverClasses.utils.GraphUtil;
-import dataStructures.trees.modals.graphs.UnweightedDirectedAdjacencyListGraph;
+import dataStructures.trees.impl.graphs.UnweightedDirectedAdjacencyListGraph;
 
 public class CreateGraph {
     public static void main(String[] args) {

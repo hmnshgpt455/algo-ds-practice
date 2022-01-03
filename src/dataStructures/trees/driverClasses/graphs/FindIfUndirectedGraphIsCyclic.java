@@ -1,12 +1,12 @@
 package dataStructures.trees.driverClasses.graphs;
 
-import dataStructures.trees.abstraction.graphs.Graph;
-import dataStructures.trees.modals.graphs.UnweightedUndirectedAdjacencyListGraph;
+import dataStructures.trees.abstraction.graphs.UnweightedGraph;
+import dataStructures.trees.impl.graphs.UnweightedUndirectedAdjacencyListGraph;
 
 public class FindIfUndirectedGraphIsCyclic {
     public static void main(String[] args) {
-        Graph<Integer> graph1 = new UnweightedUndirectedAdjacencyListGraph<>();
-        Graph<Integer> graph2 = new UnweightedUndirectedAdjacencyListGraph<>();
+        UnweightedGraph<Integer> graph1 = new UnweightedUndirectedAdjacencyListGraph<>();
+        UnweightedGraph<Integer> graph2 = new UnweightedUndirectedAdjacencyListGraph<>();
 
         graph1.addEdge(1, 0)
                 .addEdge(0, 2)

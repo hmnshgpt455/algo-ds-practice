@@ -1,7 +1,7 @@
-package dataStructures.trees.modals.graphs;
+package dataStructures.trees.impl.graphs;
 
 import dataStructures.trees.abstraction.graphs.AbstractUnweightedAdjacencyListGraph;
-import dataStructures.trees.abstraction.graphs.Graph;
+import dataStructures.trees.abstraction.graphs.UnweightedGraph;
 
 import java.util.*;
 
@@ -13,7 +13,7 @@ public class UnweightedDirectedAdjacencyListGraph<T> extends AbstractUnweightedA
     }
 
     @Override
-    public Graph<T> addEdge(T source, T destination) {
+    public UnweightedGraph<T> addEdge(T source, T destination) {
         //In case of trivial graph, the child list will be null
         Optional.ofNullable(source).ifPresent(u -> super.addEdge(u, destination));
         return this;
@@ -34,12 +34,8 @@ public class UnweightedDirectedAdjacencyListGraph<T> extends AbstractUnweightedA
 
     private boolean isCyclic(Map<T, Boolean> visited, Map<T, Boolean> recursionStack, T key) {
 
-        if (recursionStack.containsKey(key) && recursionStack.get(key)) {
-            return true;
-        }
-
-        if (visited.containsKey(key) && visited.get(key)) {
-            return false;
+        if (visited.containsKey(key)) {
+            return recursionStack.containsKey(key) && recursionStack.get(key);
         }
 
         recursionStack.put(key, true);
@@ -63,9 +59,7 @@ public class UnweightedDirectedAdjacencyListGraph<T> extends AbstractUnweightedA
         if (this.isCyclic()) {
             throw new UnsupportedOperationException("Cannot find topological sort of a cyclic graph");
         } else {
-            Optional.ofNullable(startingNode).ifPresent(key -> {
-               topologicalSort(visited, stack, key);
-            });
+            Optional.ofNullable(startingNode).ifPresent(key -> topologicalSort(visited, stack, key));
 
             adjacencyList.keySet().stream()
                     .filter(key -> !visited.containsKey(key) || !visited.get(key))

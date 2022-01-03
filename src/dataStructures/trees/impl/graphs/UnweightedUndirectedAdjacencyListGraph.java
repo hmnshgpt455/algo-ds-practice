@@ -1,7 +1,7 @@
-package dataStructures.trees.modals.graphs;
+package dataStructures.trees.impl.graphs;
 
 import dataStructures.trees.abstraction.graphs.AbstractUnweightedAdjacencyListGraph;
-import dataStructures.trees.abstraction.graphs.Graph;
+import dataStructures.trees.abstraction.graphs.UnweightedGraph;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class UnweightedUndirectedAdjacencyListGraph<T> extends AbstractUnweightedAdjacencyListGraph<T> {
     @Override
-    public Graph<T> addEdge(T source, T destination) {
+    public UnweightedGraph<T> addEdge(T source, T destination) {
         Optional.ofNullable(source).ifPresent(u -> super.addEdge(u, destination));
         Optional.ofNullable(destination).ifPresent(v -> super.addEdge(v, source));
         return this;

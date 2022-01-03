@@ -1,6 +1,6 @@
 package dataStructures.trees.driverClasses.utils;
 
-import dataStructures.trees.modals.graphs.UnweightedDirectedAdjacencyListGraph;
+import dataStructures.trees.impl.graphs.UnweightedDirectedAdjacencyListGraph;
 
 public class GraphUtil {
 

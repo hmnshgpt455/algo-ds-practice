@@ -2,7 +2,7 @@ package dataStructures.trees.abstraction.graphs;
 
 import java.util.*;
 
-public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Graph<T> {
+public abstract class AbstractUnweightedAdjacencyListGraph<T> implements UnweightedGraph<T> {
 
     protected final Map<T, List<T>> adjacencyList;
 
@@ -11,7 +11,7 @@ public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Graph<T
     }
 
     @Override
-    public Graph<T> addEdge(T source, T destination) {
+    public UnweightedGraph<T> addEdge(T source, T destination) {
         //In case of trivial graph, the child list will be null
         Optional.ofNullable(adjacencyList.get(source))
             .ifPresentOrElse(childList -> Optional.ofNullable(destination).ifPresent(childList::add),
@@ -51,8 +51,8 @@ public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Graph<T
     }
 
     private void dfs(List<T> dfsRepresentation, T startingNode, Map<T, Boolean> visited) {
-        if (!visited.containsKey(startingNode) || visited.get(startingNode)) {
-            visited.put(startingNode, false);
+        if (!visited.containsKey(startingNode) || !visited.get(startingNode)) {
+            visited.put(startingNode, true);
             this.adjacencyList.get(startingNode).forEach(node -> dfs(dfsRepresentation, node, visited));
             dfsRepresentation.add(startingNode);
         }
