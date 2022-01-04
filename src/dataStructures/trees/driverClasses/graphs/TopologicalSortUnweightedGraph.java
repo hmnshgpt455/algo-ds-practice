@@ -4,7 +4,7 @@ import dataStructures.trees.impl.graphs.UnweightedDirectedAdjacencyListGraph;
 
 import java.util.Deque;
 
-public class TopologicalSort {
+public class TopologicalSortUnweightedGraph {
     public static void main(String[] args) {
         UnweightedDirectedAdjacencyListGraph<Integer> dag = new UnweightedDirectedAdjacencyListGraph<>();
 

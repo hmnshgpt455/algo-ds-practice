@@ -1,7 +1,6 @@
 package dataStructures.trees.impl.graphs;
 
 import dataStructures.trees.abstraction.graphs.AbstractWeightedAdjacencyListGraph;
-import dataStructures.trees.abstraction.graphs.WeightedGraph;
 import dataStructures.trees.modals.graphs.WeightedNode;
 
 import java.util.*;
@@ -22,7 +21,7 @@ public class WeightedDirectedAdjacencyListGraph<T> extends AbstractWeightedAdjac
                 return true;
             }
         }
-        return null;
+        return false;
     }
 
     private boolean isCyclic(T key, Map<T, Boolean> visited, Map<T, Boolean> recursionStack) {
@@ -32,9 +31,11 @@ public class WeightedDirectedAdjacencyListGraph<T> extends AbstractWeightedAdjac
         }
         visited.put(key, true);
         recursionStack.put(key, true);
-        for (WeightedNode<T> child : adjacencyList.get(key)) {
-            if (!visited.containsKey(key) && isCyclic(child.getValue(), visited, recursionStack)) {
-                return true;
+        if (adjacencyList.get(key) != null) {
+            for (WeightedNode<T> child : adjacencyList.get(key)) {
+                if (isCyclic(child.getValue(), visited, recursionStack)) {
+                    return true;
+                }
             }
         }
         recursionStack.put(key, false);
@@ -57,10 +58,14 @@ public class WeightedDirectedAdjacencyListGraph<T> extends AbstractWeightedAdjac
         return stack;
     }
 
+    public Deque<T> getTopologicalSort() {
+        return getTopologicalSort(null);
+    }
+
     private void topologicalSort(T node, Map<T, Boolean> visited, Deque<T> stack) {
         if (!visited.containsKey(node)) {
             visited.put(node, true);
-            adjacencyList.get(node).forEach(child -> topologicalSort(child.getValue(), visited, stack));
+            Optional.ofNullable(adjacencyList.get(node)).ifPresent(n -> adjacencyList.get(node).forEach(child -> topologicalSort(child.getValue(), visited, stack)));
             stack.offerFirst(node);
         }
     }
