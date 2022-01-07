@@ -7,6 +7,7 @@ import java.util.*;
 public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedGraph<T> {
 
     protected final Map<T, List<WeightedNode<T>>> adjacencyList;
+    private Map<T, Integer> shortestPathMap;
 
     public AbstractWeightedAdjacencyListGraph() {
         this.adjacencyList = new HashMap<>();
@@ -60,16 +61,16 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
     }
 
     @Override
-    public Map<T, Integer> findDistanceFromANode(T source, Comparator<T> comparator) {
-        return dijkstraShortestPathFromSourceToEveryNode(source, comparator);
+    public Map<T, Integer> getShortestDistanceFromSourceToEveryNode(T source) {
+        return dijkstraShortestPathFromSourceToEveryNode(source);
     }
 
-    private Map<T, Integer> dijkstraShortestPathFromSourceToEveryNode(T source, Comparator<T> comparator) {
+    private Map<T, Integer> dijkstraShortestPathFromSourceToEveryNode(T source) {
         Map<T, Integer> shortestPathMap = new HashMap<>();
         //Create a min heap
         PriorityQueue<WeightedNode<T>> minHeap = new PriorityQueue<>(Comparator.comparingInt(WeightedNode::getWeight));
         this.adjacencyList.keySet().forEach(key -> {
-           if (comparator.compare(key, source) == 0) {
+           if (key.equals(source)) {
                shortestPathMap.put(key, 0);
            } else {
                shortestPathMap.put(key, Integer.MAX_VALUE);
@@ -94,5 +95,18 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
         }
     }
 
+    @Override
+    public Integer getShortestDistanceBetweenSourceAndDestination(T source, T destination) {
+        return null;
+    }
+
+    @Override
+    public Stack<T> getShortestPathFromSourceToDestination(T source, T destination) {
+        return null;
+    }
+
+    public Map<T, Integer> getShortestPathMap() {
+        return shortestPathMap;
+    }
 
 }

@@ -58,6 +58,108 @@ public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Unweigh
         }
     }
 
+    @Override
+    public Integer getShortestDistanceBetweenSourceAndDestination(T source, T destination) {
+        Map<T, Integer> shortestDistanceMap = new HashMap<>();
+        shortestDistanceMap.put(source, 0);
+
+        Queue<T> queue = new LinkedList<>();
+        queue.add(source);
+        Map<T, Boolean> visited = new HashMap<>();
+        visited.put(source, true);
+        while (!queue.isEmpty()) {
+            T currentNode = queue.poll();
+            if (adjacencyList.get(currentNode) != null) {
+                for (T child : adjacencyList.get(currentNode)) {
+                    if (!visited.containsKey(child)) {
+                        if (source.equals(destination)) {
+                            return shortestDistanceMap.get(currentNode) + 1;
+                        } else {
+                            visited.put(child, true);
+                            shortestDistanceMap.put(child, shortestDistanceMap.get(currentNode) + 1);
+                            queue.add(child);
+                        }
+                    }
+                }
+            }
+        }
+
+        return shortestDistanceMap.get(destination);
+    }
+
+    @Override
+    public Stack<T> getShortestPathFromSourceToDestination(T source, T destination) {
+        Stack<T> shortestPath = new Stack<>();
+        Map<T, T> predecessorMap = new HashMap<>();
+
+        Queue<T> queue = new LinkedList<>();
+        queue.add(source);
+        predecessorMap.put(source, null);
+        Map<T, Boolean> visited = new HashMap<>();
+        boolean isDestinationReached = false;
+        while (!queue.isEmpty()) {
+            T currentNode = queue.poll();
+            if (null != adjacencyList.get(currentNode)) {
+                for (T child : adjacencyList.get(currentNode)) {
+                    if (!visited.containsKey(child)) {
+                        if (child.equals(destination)) {
+                            predecessorMap.put(destination, currentNode);
+                            isDestinationReached = true;
+                            break;
+                        } else {
+                            visited.put(child, true);
+                            predecessorMap.put(child, currentNode);
+                            queue.add(child);
+                        }
+                    }
+                }
+            }
+            if (isDestinationReached) {
+                break;
+            }
+        }
+
+        T currentNodeInPath = destination;
+        while (predecessorMap.get(currentNodeInPath) != null) {
+            shortestPath.push(predecessorMap.get(currentNodeInPath));
+            currentNodeInPath = predecessorMap.get(currentNodeInPath);
+        }
+        return shortestPath;
+    }
+
+    @Override
+    public Map<T, Integer> getShortestDistanceFromSourceToEveryNode(T source) {
+        Map<T, Integer> shortestDistanceMap = new HashMap<>();
+        Map<T, T> predecessorMap = new HashMap<>();
+
+        doBfsAndUpdateMaps(source, shortestDistanceMap, predecessorMap);
+
+        return shortestDistanceMap;
+    }
+
+    private void doBfsAndUpdateMaps(T source, Map<T, Integer> shortestDistanceMap, Map<T, T> predecessorMap) {
+        Queue<T> queue = new LinkedList<>();
+        queue.add(source);
+        shortestDistanceMap.put(source, 0);
+        predecessorMap.put(source, null);
+        Map<T, Boolean> visited = new HashMap<>();
+        visited.put(source, true);
+
+
+        while(!queue.isEmpty()) {
+            T currentPredecessor = queue.poll();
+            Optional.ofNullable(adjacencyList.get(currentPredecessor)).ifPresent(childList -> childList.forEach(child -> {
+                        if (!visited.containsKey(child)) {
+                            predecessorMap.put(child, currentPredecessor);
+                            shortestDistanceMap.put(child, shortestDistanceMap.get(currentPredecessor) + 1);
+                            visited.put(child, true);
+                            queue.add(child);
+                        }
+                    }));
+        }
+
+    }
+
     public Map<T, List<T>> getAdjacencyList() {
         return adjacencyList;
     }

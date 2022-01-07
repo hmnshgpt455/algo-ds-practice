@@ -2,12 +2,10 @@ package dataStructures.trees.driverClasses.graphs;
 
 import dataStructures.trees.abstraction.graphs.WeightedGraph;
 import dataStructures.trees.impl.graphs.WeightedDirectedAdjacencyListGraph;
-import dataStructures.trees.modals.graphs.WeightedNode;
 
-import java.util.HashMap;
 import java.util.Map;
 
-public class ShortestPath {
+public class ShortestPathInWeightedGraph {
     public static void main(String[] args) {
         WeightedGraph<Integer> weightedGraph = new WeightedDirectedAdjacencyListGraph<>();
         weightedGraph.addEdge(0,1, 4)
@@ -37,7 +35,7 @@ public class ShortestPath {
                 .addEdge(8, 6, 6)
                 .addEdge(8, 7, 1);
 
-        Map<Integer, Integer> shortestPathMap = weightedGraph.findDistanceFromANode(0, Integer::compare);
+        Map<Integer, Integer> shortestPathMap = weightedGraph.getShortestDistanceFromSourceToEveryNode(0);
         shortestPathMap.forEach((key, value) -> System.out.println(key + " " + value));
 
     }
