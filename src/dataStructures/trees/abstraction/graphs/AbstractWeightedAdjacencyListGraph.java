@@ -59,4 +59,40 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
         }
     }
 
+    @Override
+    public Map<T, Integer> findDistanceFromANode(T source, Comparator<T> comparator) {
+        return dijkstraShortestPathFromSourceToEveryNode(source, comparator);
+    }
+
+    private Map<T, Integer> dijkstraShortestPathFromSourceToEveryNode(T source, Comparator<T> comparator) {
+        Map<T, Integer> shortestPathMap = new HashMap<>();
+        //Create a min heap
+        PriorityQueue<WeightedNode<T>> minHeap = new PriorityQueue<>(Comparator.comparingInt(WeightedNode::getWeight));
+        this.adjacencyList.keySet().forEach(key -> {
+           if (comparator.compare(key, source) == 0) {
+               shortestPathMap.put(key, 0);
+           } else {
+               shortestPathMap.put(key, Integer.MAX_VALUE);
+           }
+        });
+        minHeap.add(new WeightedNode<>(source, 0));
+
+        while (!minHeap.isEmpty()) {
+            WeightedNode<T> minimumNode = minHeap.poll();
+            shortestPathMap.put(minimumNode.getValue(), minimumNode.getWeight());
+            adjacencyList.get(minimumNode.getValue()).forEach(child -> updateWeight(minimumNode.getWeight(), child, shortestPathMap, minHeap));
+        }
+
+        return shortestPathMap;
+    }
+
+    private void updateWeight(int sourceToParentWeight, WeightedNode<T> child, Map<T, Integer> shortestPathMap, PriorityQueue<WeightedNode<T>> minHeap) {
+        //If the weight of (source to parent + parent to child) < current weight from source to child, update the weight
+        if ((sourceToParentWeight + child.getWeight()) < shortestPathMap.get(child.getValue())) {
+            shortestPathMap.put(child.getValue(), sourceToParentWeight + child.getWeight());
+            minHeap.add(new WeightedNode<>(child.getValue(), sourceToParentWeight + child.getWeight()));
+        }
+    }
+
+
 }
