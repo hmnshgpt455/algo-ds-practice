@@ -1,8 +1,14 @@
 package dataStructures.abstraction.graphs;
 
+import dataStructures.modals.graphs.Edge;
 import dataStructures.modals.graphs.WeightedNode;
 
 import java.util.*;
+
+/**
+ * @author Himanshu Gupta
+ * @param <T>
+ */
 
 public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedGraph<T> {
 
@@ -80,6 +86,58 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
         }
 
         return shortestPath;
+    }
+
+    @Override
+    public List<Edge<T>> getPrimMinimumSpanningTree() {
+        //This will hold the edges of the MST
+        List<Edge<T>> minimumSpanningTreeEdges = new ArrayList<>();
+        //This is the binary min heap according to the weights
+        PriorityQueue<WeightedNode<T>> minHeap = new PriorityQueue<>(Comparator.comparingInt(WeightedNode::getWeight));
+        //This will hold the node to the minimum edge length encountered till now. This will be updated to the latest minimum, if another lesser length is encountered
+        Map<T, Integer> nodeToEdgeLengthMap = new HashMap<>();
+        //This will hold the node to the edge to reach that node which will be included in MST.
+        //This will again be updated based on if we get another edge that has lesser length. So, if above map gets updated, this will also get updated.
+        Map<T, Edge<T>> nodeToEdgeIncludedInMST = new HashMap<>();
+        //Initialize the weight of each node to be as INF
+        adjacencyList.keySet().forEach(key -> nodeToEdgeLengthMap.put(key, Integer.MAX_VALUE));
+        //Pick a random startingNode
+        T startingNode = adjacencyList.keySet().iterator().next();
+        //The edge length from the starting node to itself is 0
+        nodeToEdgeLengthMap.put(startingNode, 0);
+        minHeap.add(new WeightedNode<>(startingNode, 0));
+
+        while (!minHeap.isEmpty()) {
+            //Greedily picking the node with currently the least weighted edge
+            WeightedNode<T> minimumWeightNode = minHeap.poll();
+            //Remove this minimum from the map, so that it is not picked again
+            nodeToEdgeLengthMap.remove(minimumWeightNode.getValue());
+            if (nodeToEdgeIncludedInMST.get(minimumWeightNode.getValue()) != null) {
+                //If the node is not the starting node, include it's edge in the result MST edge list.
+                minimumSpanningTreeEdges.add(nodeToEdgeIncludedInMST.get(minimumWeightNode.getValue()));
+            }
+
+            //For each child update the data as required
+            adjacencyList.get(minimumWeightNode.getValue())
+                    .forEach(child -> updatePrimMSTData(minHeap, nodeToEdgeIncludedInMST, nodeToEdgeLengthMap, minimumWeightNode, child));
+        }
+
+        return minimumSpanningTreeEdges;
+    }
+
+    private void updatePrimMSTData(PriorityQueue<WeightedNode<T>> minHeap, Map<T, Edge<T>> nodeToEdgeIncludedInMST,
+                                   Map<T, Integer> nodeToEdgeLengthMap, WeightedNode<T> parent, WeightedNode<T> child) {
+
+        if (nodeToEdgeLengthMap.containsKey(child.getValue()) && nodeToEdgeLengthMap.get(child.getValue()) > child.getWeight()) {
+            //If the stored length of an edge for the child node is more than the current edge length to the child, update the new weight
+            nodeToEdgeLengthMap.put(child.getValue(), child.getWeight());
+            //Update the edge in the MST for this child
+            nodeToEdgeIncludedInMST.put(child.getValue(), new Edge<>(parent.getValue(), child.getValue()));
+            //Remove the previous value
+            minHeap.remove(child);
+            //Add the new value
+            minHeap.add(child);
+        }
     }
 
     private void dfs(Map<T, Boolean> visited, T key, List<T> dfsRepresentation) {
