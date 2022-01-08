@@ -14,12 +14,6 @@ public class RedBlackTree<T extends Comparable<? super T>> extends AbstractTree<
     private boolean rightLeftCase = false;
     private boolean rightRightCase = false;
 
-    @Override
-    public Tree<T> insertKey(T key) {
-        this.root = insertKeyRecursively(key, this.root, null);
-        return this;
-    }
-
     public RedBlackTree() {
         this.root = null;
     }
@@ -27,6 +21,17 @@ public class RedBlackTree<T extends Comparable<? super T>> extends AbstractTree<
     public RedBlackTree(List<T> keys) {
         this.root = null;
         keys.forEach(this::insertKey);
+    }
+
+    @Override
+    public Tree<T> insertKey(T key) {
+        this.root = insertKeyRecursively(key, this.root, null);
+        return this;
+    }
+
+    @Override
+    public Tree<T> deleteKey(T key) {
+        return null;
     }
 
     private RedBlackTreeNode<T> insertKeyRecursively(T key, RedBlackTreeNode<T> root, RedBlackTreeNode<T> parent) {
@@ -164,11 +169,6 @@ public class RedBlackTree<T extends Comparable<? super T>> extends AbstractTree<
             }
         }
         return node;
-    }
-
-    @Override
-    public Tree<T> deleteKey(T key) {
-        return null;
     }
 
 

@@ -17,9 +17,14 @@ public class ListHeap<T> implements Heap<T> {
         this.heapArray = buildHeapFromArray(heapArray);
     }
 
+    public ListHeap(HeapifyFunction<T> heapifyFunction) {
+        this.heapifyFunction = heapifyFunction;
+        this.heapArray = new ArrayList<>();
+    }
+
     private List<T> buildHeapFromArray(List<T> heapArray) {
         int sizeOfTheArray = heapArray.size();
-        int lastNonLeafNodeIndex = (sizeOfTheArray/2) - 1;
+        int lastNonLeafNodeIndex = (sizeOfTheArray / 2) - 1;
         for (int i = lastNonLeafNodeIndex; i >= 0; i--) {
             heapify(i, heapArray);
         }
@@ -67,11 +72,6 @@ public class ListHeap<T> implements Heap<T> {
         this.heapArray = heapArray;
     }
 
-    public ListHeap(HeapifyFunction<T> heapifyFunction) {
-        this.heapifyFunction = heapifyFunction;
-        this.heapArray = new ArrayList<>();
-    }
-
     @Override
     public T getTop() {
         return this.heapArray.get(0);
@@ -83,15 +83,6 @@ public class ListHeap<T> implements Heap<T> {
         this.heapArray.remove(0);
         this.heapArray = buildHeap();
         return elementToRemove;
-    }
-
-    private List<T> buildHeap() {
-        int sizeOfTheArray = heapArray.size();
-        int lastNonLeafNodeIndex = (sizeOfTheArray/2) - 1;
-        for (int i = lastNonLeafNodeIndex; i >= 0; i--) {
-            heapify(i, heapArray);
-        }
-        return heapArray;
     }
 
     @Override
@@ -123,5 +114,14 @@ public class ListHeap<T> implements Heap<T> {
     @Override
     public Heap<T> deleteKey(T value) {
         return null;
+    }
+
+    private List<T> buildHeap() {
+        int sizeOfTheArray = heapArray.size();
+        int lastNonLeafNodeIndex = (sizeOfTheArray / 2) - 1;
+        for (int i = lastNonLeafNodeIndex; i >= 0; i--) {
+            heapify(i, heapArray);
+        }
+        return heapArray;
     }
 }

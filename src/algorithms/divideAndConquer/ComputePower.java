@@ -28,7 +28,7 @@ public class ComputePower {
         //Because the power is odd, so, need to multiply extra number to incorporate for the loss due to type conversion
         if (power < 0) {
             //It means we have to multiply number power -1
-            return (halfPowerValue * halfPowerValue)/number;
+            return (halfPowerValue * halfPowerValue) / number;
         }
         return number * halfPowerValue * halfPowerValue;
     }

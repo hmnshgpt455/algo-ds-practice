@@ -9,9 +9,9 @@ public class CountInversions {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
 
-        int[] arr = IntStream.range(0,n).map(i -> sc.nextInt()).toArray();
+        int[] arr = IntStream.range(0, n).map(i -> sc.nextInt()).toArray();
 
-        int ans = countInversions(arr, 0, n-1);
+        int ans = countInversions(arr, 0, n - 1);
 
         System.out.println(ans);
     }
@@ -24,13 +24,13 @@ public class CountInversions {
         int count = 0;
 
         if (l < r) {
-            int mid = l + (r-l)/2;
+            int mid = l + (r - l) / 2;
 
             //Count inversions in left sub array
             count += countInversionsAndSort(arr, l, mid);
 
             //Count inversions in right sub array
-            count += countInversionsAndSort(arr, mid+1, r);
+            count += countInversionsAndSort(arr, mid + 1, r);
 
             //Now count the inversions in the merged array
             count += mergeAndCount(arr, l, mid, r);
@@ -42,8 +42,8 @@ public class CountInversions {
     private static int mergeAndCount(int[] arr, int l, int mid, int r) {
         int inversionCount = 0, leftIndex = 0, rightIndex = 0, arrIndex = l;
 
-        int[] leftSubArray = Arrays.copyOfRange(arr, l, mid+1);
-        int[] rightSubArray = Arrays.copyOfRange(arr, mid+1, r+1);
+        int[] leftSubArray = Arrays.copyOfRange(arr, l, mid + 1);
+        int[] rightSubArray = Arrays.copyOfRange(arr, mid + 1, r + 1);
 
         while (leftIndex < leftSubArray.length && rightIndex < rightSubArray.length) {
             if (leftSubArray[leftIndex] > rightSubArray[rightIndex]) {

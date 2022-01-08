@@ -82,7 +82,7 @@ public class AVLTree<T extends Comparable<? super T>> extends AbstractTree<AVLTr
             return balanceTheNodeIfUnbalanced(node, key);
         }
 
-        return  null;
+        return null;
     }
 
     private T findInOrderSuccessor(AVLTreeNode<T> node) {

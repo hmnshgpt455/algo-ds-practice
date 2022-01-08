@@ -1,8 +1,6 @@
 package algorithms.searching;
 
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BinarySearchFindElementExactly {
@@ -32,7 +30,7 @@ public class BinarySearchFindElementExactly {
 
     private static int findElement(int elementToBeFound, int[] sortedArray) {
 
-        return binarySearchForElement(elementToBeFound, sortedArray, 0, (sortedArray.length-1)/2, sortedArray.length-1);
+        return binarySearchForElement(elementToBeFound, sortedArray, 0, (sortedArray.length - 1) / 2, sortedArray.length - 1);
     }
 
     private static int binarySearchForElement(int elementToBeFound, int[] sortedArray, int startingIndex, int mid, int endingIndex) {
@@ -45,9 +43,9 @@ public class BinarySearchFindElementExactly {
         }
 
         if (elementToBeFound < sortedArray[mid]) {
-            return binarySearchForElement(elementToBeFound, sortedArray, startingIndex, (startingIndex+mid-1)/2, mid-1);
+            return binarySearchForElement(elementToBeFound, sortedArray, startingIndex, (startingIndex + mid - 1) / 2, mid - 1);
         }
 
-        return binarySearchForElement(elementToBeFound, sortedArray, mid+1, (mid+endingIndex+1)/2, endingIndex);
+        return binarySearchForElement(elementToBeFound, sortedArray, mid + 1, (mid + endingIndex + 1) / 2, endingIndex);
     }
 }

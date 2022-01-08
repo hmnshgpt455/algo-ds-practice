@@ -16,8 +16,8 @@ public class TheKnightTourProblem {
         int[][] solutionChessboard = new int[n][n];
 
         IntStream.range(0, n).forEach(i -> IntStream.range(0, n).forEach(j -> solutionChessboard[i][j] = -1));
-        int[] possibleMovesVertically = { 2, 1, -1, -2, -2, -1, 1, 2 };
-        int[] possibleMovesHorizontally = { 1, 2, 2, 1, -1, -2, -2, -1 };
+        int[] possibleMovesVertically = {2, 1, -1, -2, -2, -1, 1, 2};
+        int[] possibleMovesHorizontally = {1, 2, 2, 1, -1, -2, -2, -1};
         solutionChessboard[0][0] = 0;
 
         boolean areDesiredMovesPossible =
@@ -38,7 +38,7 @@ public class TheKnightTourProblem {
                                                   int[] possibleMovesHorizontally, int moveNumber,
                                                   int currentXLoc, int currentYLoc) {
         AtomicBoolean isPossible = new AtomicBoolean();
-        if (moveNumber == n*n) {
+        if (moveNumber == n * n) {
             return true;
         }
 

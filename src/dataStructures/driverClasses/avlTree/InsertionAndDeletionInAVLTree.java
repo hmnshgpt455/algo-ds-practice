@@ -1,8 +1,8 @@
 package dataStructures.driverClasses.avlTree;
 
 import dataStructures.driverClasses.utils.BinaryTreeUtil;
-import dataStructures.modals.trees.nodes.AVLTreeNode;
 import dataStructures.impl.trees.AVLTree;
+import dataStructures.modals.trees.nodes.AVLTreeNode;
 
 public class InsertionAndDeletionInAVLTree {
     public static void main(String[] args) {

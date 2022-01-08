@@ -10,15 +10,14 @@ import java.util.Optional;
 
 public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTree<T> {
 
+    private final BinaryTreeUtil<BinaryTreeNode<T>, T> binaryTreeUtil = new BinaryTreeUtil<>();
     private int preIndex;
     private int inOrderIndexToConvertToBST;
-
-    private final BinaryTreeUtil<BinaryTreeNode<T>, T> binaryTreeUtil = new BinaryTreeUtil<>();
 
     public BinarySearchTree(List<T> preOrder) {
         preIndex = 0;
         T max = null, min = null;
-        for (int i = 0; i<preOrder.size(); i++) {
+        for (int i = 0; i < preOrder.size(); i++) {
             if (i == 0) {
                 max = min = preOrder.get(i);
             } else {
@@ -34,6 +33,10 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
 
     public BinarySearchTree() {
 
+    }
+
+    public BinarySearchTree(BinaryTree<T> binaryTree) {
+        this.root = convertFromBinaryTreeToBST(binaryTree);
     }
 
     private BinaryTreeNode<T> constructTreeUsingPreOrder(List<T> preOrder, T maxValue, T minValue) {
@@ -61,10 +64,6 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
         return null;
     }
 
-    public BinarySearchTree(BinaryTree<T> binaryTree) {
-        this.root = convertFromBinaryTreeToBST(binaryTree);
-    }
-
     private BinaryTreeNode<T> convertFromBinaryTreeToBST(BinaryTree<T> binaryTree) {
         List<T> binaryTreeInOrder = binaryTreeUtil.getInOrderTraversal(binaryTree);
         Collections.sort(binaryTreeInOrder);
@@ -82,7 +81,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
             convertToBST(root.getRight(), binaryTreeInOrder);
         }
     }
-    
+
     public BinaryTreeNode<T> findKey(T key) {
         return findKeyRecursively(this.root, key);
     }

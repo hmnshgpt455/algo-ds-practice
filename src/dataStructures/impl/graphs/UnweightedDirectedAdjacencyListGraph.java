@@ -24,7 +24,7 @@ public class UnweightedDirectedAdjacencyListGraph<T> extends AbstractUnweightedA
         Map<T, Boolean> visited = new HashMap<>();
         Map<T, Boolean> recursionStack = new HashMap<>();
 
-        for(T key : this.adjacencyList.keySet()) {
+        for (T key : this.adjacencyList.keySet()) {
             if (isCyclic(visited, recursionStack, key)) {
                 return true;
             }
@@ -79,7 +79,7 @@ public class UnweightedDirectedAdjacencyListGraph<T> extends AbstractUnweightedA
 
             Optional.ofNullable(adjacencyList.get(key))
                     .ifPresent(children -> children.stream().filter(child -> !visited.containsKey(child))
-                    .forEach(child -> topologicalSort(visited, stack, child)));
+                            .forEach(child -> topologicalSort(visited, stack, child)));
 
             stack.offerFirst(key);
         }

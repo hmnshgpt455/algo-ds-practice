@@ -1,8 +1,8 @@
 package dataStructures.driverClasses.binarySearchTree;
 
 import dataStructures.driverClasses.utils.BinaryTreeUtil;
-import dataStructures.modals.trees.nodes.BinaryTreeNode;
 import dataStructures.impl.trees.BinarySearchTree;
+import dataStructures.modals.trees.nodes.BinaryTreeNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class DeleteKeyInBST {
         BinarySearchTree<Integer> createdBst = new BinarySearchTree<>(preOrderRepresentation);
         createdBst.deleteKey(120)
                 .deleteKey(110)
-                        .deleteKey(30);
+                .deleteKey(30);
 
 //        //Case 1 : Deleting leaf node
 //        createdBst.deleteKey(120);

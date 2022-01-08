@@ -1,7 +1,5 @@
 package dataStructures.modals.graphs;
 
-import java.util.Objects;
-
 public class WeightedNode<T> {
     T value;
     Integer weight;

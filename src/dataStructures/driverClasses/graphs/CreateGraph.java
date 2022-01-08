@@ -17,7 +17,7 @@ public class CreateGraph {
         graphUtil.printGraph(adjacencyListGraph);
 
         System.out.println("BFS of the graph ");
-        adjacencyListGraph.getBFSRepresentation(2).forEach(el -> System.out.print(el+" "));
+        adjacencyListGraph.getBFSRepresentation(2).forEach(el -> System.out.print(el + " "));
 
         System.out.println("\nDFS of the graph");
         adjacencyListGraph.getDFSRepresentation(2).forEach(el -> System.out.print(el + " "));

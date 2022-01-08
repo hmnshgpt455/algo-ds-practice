@@ -1,8 +1,8 @@
 package dataStructures.impl.trees;
 
+import dataStructures.abstraction.trees.AbstractTree;
 import dataStructures.modals.trees.common.TreeLinkedList;
 import dataStructures.modals.trees.nodes.BinaryTreeNode;
-import dataStructures.abstraction.trees.AbstractTree;
 import dataStructures.modals.trees.nodes.ListNode;
 
 import java.util.*;
@@ -12,6 +12,8 @@ import java.util.stream.IntStream;
 
 public class BinaryTree<T> extends AbstractTree<BinaryTreeNode<T>, T> {
 
+    private int preIndex = 0;
+
     public BinaryTree(BinaryTreeNode<T> root) {
         this.root = root;
     }
@@ -20,15 +22,40 @@ public class BinaryTree<T> extends AbstractTree<BinaryTreeNode<T>, T> {
         this.root = new BinaryTreeNode<>(value);
     }
 
+
     public BinaryTree() {
         this.root = null;
     }
 
-
-    private int preIndex = 0;
-
     public BinaryTree(TreeLinkedList<T> linkedList) {
         this.root = createTreeFromLinkedList(linkedList);
+    }
+
+    @SuppressWarnings("unchecked")
+    public BinaryTree(String inOrderTraversal, String preOrderTraversal, String postOrderTraversal) {
+        this.root = (BinaryTreeNode<T>) Optional.of(inOrderTraversal)
+                .flatMap(inOrder -> Optional.ofNullable(preOrderTraversal)
+                        .map(preOrder -> {
+                            HashMap<Character, Integer> characterToIndexMap = buildCharacterToIndexMap(inOrderTraversal);
+                            return convertToBinaryTreeUsingInorderAndPreOrder(preOrder, characterToIndexMap,
+                                    0, inOrder.length() - 1);
+                        }))
+                .orElseGet(BinaryTreeNode::new);
+    }
+
+    @SuppressWarnings("unchecked")
+    public BinaryTree(List<T> inOrderTraversal, List<T> levelOrderTraversal) {
+        this.root = (BinaryTreeNode<T>) Optional.ofNullable(inOrderTraversal)
+                .flatMap(inOrder -> Optional.ofNullable(levelOrderTraversal)
+                        .map(levelOrder -> {
+                            HashMap<T, Integer> elementsToIndexMapForInorder = buildElementToIndexMap(inOrder);
+                            HashMap<T, Integer> elementsToIndexMapForLevelOrder = buildElementToIndexMap(levelOrder);
+                            Queue<BinaryTreeNode<T>> levelQueue = new LinkedList<>();
+                            levelQueue.add(new BinaryTreeNode<>(levelOrder.get(0)));
+                            convertToBinaryTreeUsingLevelOrderAndInorder(elementsToIndexMapForInorder, elementsToIndexMapForLevelOrder,
+                                    0, inOrder.size() - 1, 0, levelQueue, inOrder, levelOrder);
+                            return new BinaryTreeNode<>(1);
+                        })).orElse(null);
     }
 
     private BinaryTreeNode<T> createTreeFromLinkedList(TreeLinkedList<T> linkedList) {
@@ -52,38 +79,11 @@ public class BinaryTree<T> extends AbstractTree<BinaryTreeNode<T>, T> {
         return root;
     }
 
-    @SuppressWarnings("unchecked")
-    public BinaryTree(String inOrderTraversal, String preOrderTraversal, String postOrderTraversal) {
-        this.root = (BinaryTreeNode<T>) Optional.of(inOrderTraversal)
-                .flatMap(inOrder -> Optional.ofNullable(preOrderTraversal)
-                        .map(preOrder -> {
-                            HashMap<Character, Integer> characterToIndexMap = buildCharacterToIndexMap(inOrderTraversal);
-                            return convertToBinaryTreeUsingInorderAndPreOrder(preOrder, characterToIndexMap,
-                                    0, inOrder.length()-1);
-                        }))
-                .orElseGet(BinaryTreeNode::new);
-    }
-
-    @SuppressWarnings("unchecked")
-    public BinaryTree(List<T> inOrderTraversal, List<T> levelOrderTraversal) {
-        this.root = (BinaryTreeNode<T>) Optional.ofNullable(inOrderTraversal)
-                .flatMap(inOrder -> Optional.ofNullable(levelOrderTraversal)
-                        .map(levelOrder -> {
-                            HashMap<T, Integer> elementsToIndexMapForInorder = buildElementToIndexMap(inOrder);
-                            HashMap<T, Integer> elementsToIndexMapForLevelOrder = buildElementToIndexMap(levelOrder);
-                            Queue<BinaryTreeNode<T>> levelQueue = new LinkedList<>();
-                            levelQueue.add(new BinaryTreeNode<>(levelOrder.get(0)));
-                            convertToBinaryTreeUsingLevelOrderAndInorder(elementsToIndexMapForInorder, elementsToIndexMapForLevelOrder,
-                                    0, inOrder.size()-1, 0, levelQueue, inOrder, levelOrder);
-                            return new BinaryTreeNode<>(1);
-                        })).orElse(null);
-    }
-
     private BinaryTreeNode<T> convertToBinaryTreeUsingLevelOrderAndInorder(HashMap<T, Integer> elementsToIndexMapForInorder,
-                                                                        HashMap<T, Integer> elementsToIndexMapForLevelOrder,
-                                                                        int startIndex, int endIndex, int numberOfSiblingsToTheRight,
-                                                                        Queue<BinaryTreeNode<T>> levelQueue, List<T> inOrder,
-                                                                        List<T> levelOrder) {
+                                                                           HashMap<T, Integer> elementsToIndexMapForLevelOrder,
+                                                                           int startIndex, int endIndex, int numberOfSiblingsToTheRight,
+                                                                           Queue<BinaryTreeNode<T>> levelQueue, List<T> inOrder,
+                                                                           List<T> levelOrder) {
         return null;
 
     }

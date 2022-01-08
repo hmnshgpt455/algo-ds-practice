@@ -3,7 +3,6 @@ package algorithms.greedy;
 import java.util.Comparator;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.DoubleAdder;
 import java.util.stream.IntStream;
 
 public class FractionalKnapsackProblem {
@@ -36,17 +35,17 @@ public class FractionalKnapsackProblem {
         private final double value;
         private final double weight;
 
+        public Item(double value, double weight) {
+            this.value = value;
+            this.weight = weight;
+        }
+
         public double getValue() {
             return value;
         }
 
         public double getWeight() {
             return weight;
-        }
-
-        public Item(double value, double weight) {
-            this.value = value;
-            this.weight = weight;
         }
     }
 }

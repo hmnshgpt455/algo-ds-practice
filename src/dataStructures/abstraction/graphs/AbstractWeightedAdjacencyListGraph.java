@@ -50,6 +50,38 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
         return null;
     }
 
+    @Override
+    public Map<T, Integer> getShortestDistanceFromSourceToEveryNode(T source) {
+        return dijkstraShortestPathFromSourceToEveryNode(source);
+    }
+
+    @Override
+    public Integer getShortestDistanceBetweenSourceAndDestination(T source, T destination) {
+        Map<T, Integer> shortestDistanceMap = new HashMap<>();
+        Map<T, T> predecessorMap = new HashMap<>();
+        buildShortestPathDataMaps(source, destination, shortestDistanceMap, predecessorMap);
+
+        return shortestDistanceMap.get(destination);
+    }
+
+    @Override
+    public Stack<T> getShortestPathFromSourceToDestination(T source, T destination) {
+
+        Map<T, Integer> shortestDistanceMap = new HashMap<>();
+        Map<T, T> predecessorMap = new HashMap<>();
+        buildShortestPathDataMaps(source, destination, shortestDistanceMap, predecessorMap);
+        Stack<T> shortestPath = new Stack<>();
+
+        T currentNode = destination;
+        shortestPath.push(destination);
+        while (predecessorMap.get(currentNode) != null) {
+            shortestPath.push(predecessorMap.get(currentNode));
+            currentNode = predecessorMap.get(currentNode);
+        }
+
+        return shortestPath;
+    }
+
     private void dfs(Map<T, Boolean> visited, T key, List<T> dfsRepresentation) {
         if (!visited.containsKey(key)) {
             visited.put(key, true);
@@ -59,21 +91,16 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
         }
     }
 
-    @Override
-    public Map<T, Integer> getShortestDistanceFromSourceToEveryNode(T source) {
-        return dijkstraShortestPathFromSourceToEveryNode(source);
-    }
-
     private Map<T, Integer> dijkstraShortestPathFromSourceToEveryNode(T source) {
         Map<T, Integer> shortestPathMap = new HashMap<>();
         //Create a min heap
         PriorityQueue<WeightedNode<T>> minHeap = new PriorityQueue<>(Comparator.comparingInt(WeightedNode::getWeight));
         this.adjacencyList.keySet().forEach(key -> {
-           if (key.equals(source)) {
-               shortestPathMap.put(key, 0);
-           } else {
-               shortestPathMap.put(key, Integer.MAX_VALUE);
-           }
+            if (key.equals(source)) {
+                shortestPathMap.put(key, 0);
+            } else {
+                shortestPathMap.put(key, Integer.MAX_VALUE);
+            }
         });
         minHeap.add(new WeightedNode<>(source, 0));
 
@@ -91,15 +118,6 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
             shortestPathMap.put(child.getValue(), sourceToParentWeight + child.getWeight());
             minHeap.add(new WeightedNode<>(child.getValue(), sourceToParentWeight + child.getWeight()));
         }
-    }
-
-    @Override
-    public Integer getShortestDistanceBetweenSourceAndDestination(T source, T destination) {
-        Map<T, Integer> shortestDistanceMap = new HashMap<>();
-        Map<T, T> predecessorMap = new HashMap<>();
-        buildShortestPathDataMaps(source, destination, shortestDistanceMap, predecessorMap);
-
-        return shortestDistanceMap.get(destination);
     }
 
     private void populateMaps(T destination, PriorityQueue<WeightedNode<T>> minHeap, Map<T, Integer> shortestDistanceMap,
@@ -125,24 +143,6 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
             predecessorMap.put(child.getValue(), parent.getValue());
             minHeap.add(new WeightedNode<>(child.getValue(), sourceToParentWeight + child.getWeight()));
         }
-    }
-
-    @Override
-    public Stack<T> getShortestPathFromSourceToDestination(T source, T destination) {
-
-        Map<T, Integer> shortestDistanceMap = new HashMap<>();
-        Map<T, T> predecessorMap = new HashMap<>();
-        buildShortestPathDataMaps(source, destination, shortestDistanceMap, predecessorMap);
-        Stack<T> shortestPath = new Stack<>();
-
-        T currentNode = destination;
-        shortestPath.push(destination);
-        while (predecessorMap.get(currentNode) != null) {
-            shortestPath.push(predecessorMap.get(currentNode));
-            currentNode = predecessorMap.get(currentNode);
-        }
-
-        return shortestPath;
     }
 
     private void buildShortestPathDataMaps(T source, T destination, Map<T, Integer> shortestDistanceMap, Map<T, T> predecessorMap) {

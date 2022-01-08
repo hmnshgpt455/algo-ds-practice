@@ -9,7 +9,7 @@ import java.util.Stack;
 public class ShortestPathInWeightedGraph {
     public static void main(String[] args) {
         WeightedGraph<Integer> weightedGraph = new WeightedDirectedAdjacencyListGraph<>();
-        weightedGraph.addEdge(0,1, 4)
+        weightedGraph.addEdge(0, 1, 4)
                 .addEdge(0, 7, 8)
                 .addEdge(1, 2, 8)
                 .addEdge(1, 7, 11)

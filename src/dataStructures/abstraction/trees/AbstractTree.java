@@ -1,7 +1,7 @@
 package dataStructures.abstraction.trees;
 
 
-public abstract class AbstractTree<T, V>  implements Tree<V> {
+public abstract class AbstractTree<T, V> implements Tree<V> {
 
     protected T root;
 

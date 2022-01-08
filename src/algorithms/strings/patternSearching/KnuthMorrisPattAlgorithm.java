@@ -25,17 +25,17 @@ public class KnuthMorrisPattAlgorithm {
         int j = 0;
 
         int inputStringLength = inputString.length(), patternLength = pattern.length();
-        for (int i = 0; i< inputStringLength; i++) {
+        for (int i = 0; i < inputStringLength; i++) {
             if (inputString.charAt(i) == pattern.charAt(j)) {
                 if (j == patternLength - 1) {
-                    listOfAllOccurrences.add(i-patternLength+1);
+                    listOfAllOccurrences.add(i - patternLength + 1);
                     j = 0;
                 } else {
                     j++;
                 }
             } else {
                 if (j != 0) {
-                    j = lps[j-1];
+                    j = lps[j - 1];
                 }
             }
         }
@@ -48,13 +48,13 @@ public class KnuthMorrisPattAlgorithm {
         int[] lps = new int[pattern.length()];
         lps[0] = 0;
         //Creating longest proper suffix array for each length of the pattern
-        for (int j = 1; j<pattern.length(); j++) {
+        for (int j = 1; j < pattern.length(); j++) {
             //If the chars at i and j are equal, increment both i and j, so that there is a possibility to get
             //a longer proper suffix for the next length
             if (pattern.charAt(i) == pattern.charAt(j)) {
                 //The lps at j will be equal to the length of the chars which are equal at both prefix and suffix
                 //So, that will be 1 plus the i. Like i = 0, lps[j] = 1 (there is one element that is a proper suffix)
-                lps[j] = i+1;
+                lps[j] = i + 1;
                 i++;
             } else {
                 //If the chars at i and j are not equal, take the previous lps to current i and check that
@@ -68,11 +68,11 @@ public class KnuthMorrisPattAlgorithm {
                     Check one note fot the diagrammatic explanation
                  */
                 while (i != 0 && pattern.charAt(i) != pattern.charAt(j)) {
-                    i = lps[i-1];
+                    i = lps[i - 1];
                 }
 
                 if (pattern.charAt(i) == pattern.charAt(j)) {
-                    lps[j] = i+1;
+                    lps[j] = i + 1;
                     i++;
                 } else {
                     lps[j] = 0;

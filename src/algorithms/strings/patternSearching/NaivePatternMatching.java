@@ -19,12 +19,12 @@ public class NaivePatternMatching {
         int patternLength = pattern.length();
 
         IntStream.range(0, inputStringLength - patternLength + 1).forEach(i -> {
-           //We are looking at the substring which is starting at index i. We now need to check if this substring matches the pattern
-           boolean doesPatternMatch = IntStream.range(0, patternLength).allMatch(j -> inputString.charAt(i+j) == pattern.charAt(j));
+            //We are looking at the substring which is starting at index i. We now need to check if this substring matches the pattern
+            boolean doesPatternMatch = IntStream.range(0, patternLength).allMatch(j -> inputString.charAt(i + j) == pattern.charAt(j));
 
-           if (doesPatternMatch) {
-               System.out.println("Match found at : " + i);
-           }
+            if (doesPatternMatch) {
+                System.out.println("Match found at : " + i);
+            }
         });
     }
 }

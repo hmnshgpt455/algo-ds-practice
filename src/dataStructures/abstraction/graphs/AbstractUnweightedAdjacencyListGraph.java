@@ -14,13 +14,13 @@ public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Unweigh
     public UnweightedGraph<T> addEdge(T source, T destination) {
         //In case of trivial graph, the child list will be null
         Optional.ofNullable(adjacencyList.get(source))
-            .ifPresentOrElse(childList -> Optional.ofNullable(destination).ifPresent(childList::add),
-                    () -> Optional.ofNullable(destination)
-                            .ifPresentOrElse(v -> {
-                                List<T> newChildList = new ArrayList<>();
-                                newChildList.add(v);
-                                adjacencyList.put(source, newChildList);
-                            }, () -> adjacencyList.put(source, null)));
+                .ifPresentOrElse(childList -> Optional.ofNullable(destination).ifPresent(childList::add),
+                        () -> Optional.ofNullable(destination)
+                                .ifPresentOrElse(v -> {
+                                    List<T> newChildList = new ArrayList<>();
+                                    newChildList.add(v);
+                                    adjacencyList.put(source, newChildList);
+                                }, () -> adjacencyList.put(source, null)));
         return this;
     }
 
@@ -50,12 +50,14 @@ public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Unweigh
         return dfsRepresentation;
     }
 
-    private void dfs(List<T> dfsRepresentation, T startingNode, Map<T, Boolean> visited) {
-        if (!visited.containsKey(startingNode) || !visited.get(startingNode)) {
-            visited.put(startingNode, true);
-            this.adjacencyList.get(startingNode).forEach(node -> dfs(dfsRepresentation, node, visited));
-            dfsRepresentation.add(startingNode);
-        }
+    @Override
+    public Map<T, Integer> getShortestDistanceFromSourceToEveryNode(T source) {
+        Map<T, Integer> shortestDistanceMap = new HashMap<>();
+        Map<T, T> predecessorMap = new HashMap<>();
+
+        doBfsAndUpdateMaps(source, shortestDistanceMap, predecessorMap);
+
+        return shortestDistanceMap;
     }
 
     @Override
@@ -129,14 +131,12 @@ public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Unweigh
         return shortestPath;
     }
 
-    @Override
-    public Map<T, Integer> getShortestDistanceFromSourceToEveryNode(T source) {
-        Map<T, Integer> shortestDistanceMap = new HashMap<>();
-        Map<T, T> predecessorMap = new HashMap<>();
-
-        doBfsAndUpdateMaps(source, shortestDistanceMap, predecessorMap);
-
-        return shortestDistanceMap;
+    private void dfs(List<T> dfsRepresentation, T startingNode, Map<T, Boolean> visited) {
+        if (!visited.containsKey(startingNode) || !visited.get(startingNode)) {
+            visited.put(startingNode, true);
+            this.adjacencyList.get(startingNode).forEach(node -> dfs(dfsRepresentation, node, visited));
+            dfsRepresentation.add(startingNode);
+        }
     }
 
     private void doBfsAndUpdateMaps(T source, Map<T, Integer> shortestDistanceMap, Map<T, T> predecessorMap) {
@@ -148,16 +148,16 @@ public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Unweigh
         visited.put(source, true);
 
 
-        while(!queue.isEmpty()) {
+        while (!queue.isEmpty()) {
             T currentPredecessor = queue.poll();
             Optional.ofNullable(adjacencyList.get(currentPredecessor)).ifPresent(childList -> childList.forEach(child -> {
-                        if (!visited.containsKey(child)) {
-                            predecessorMap.put(child, currentPredecessor);
-                            shortestDistanceMap.put(child, shortestDistanceMap.get(currentPredecessor) + 1);
-                            visited.put(child, true);
-                            queue.add(child);
-                        }
-                    }));
+                if (!visited.containsKey(child)) {
+                    predecessorMap.put(child, currentPredecessor);
+                    shortestDistanceMap.put(child, shortestDistanceMap.get(currentPredecessor) + 1);
+                    visited.put(child, true);
+                    queue.add(child);
+                }
+            }));
         }
 
     }
