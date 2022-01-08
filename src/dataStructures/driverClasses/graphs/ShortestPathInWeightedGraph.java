@@ -36,7 +36,7 @@ public class ShortestPathInWeightedGraph {
                 .addEdge(8, 6, 6)
                 .addEdge(8, 7, 1);
 
-        Map<Integer, Integer> shortestPathMap = weightedGraph.getShortestDistanceFromSourceToEveryNode(8);
+        Map<Integer, Integer> shortestPathMap = weightedGraph.getShortestDistanceFromSourceToEveryNode(0);
         shortestPathMap.forEach((key, value) -> System.out.println(key + " " + value));
         System.out.println(weightedGraph.getShortestDistanceBetweenSourceAndDestination(8, 5));
         Stack<Integer> shortestPath = weightedGraph.getShortestPathFromSourceToDestination(8, 6);

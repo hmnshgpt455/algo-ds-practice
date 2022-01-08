@@ -147,7 +147,6 @@ public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Unweigh
         Map<T, Boolean> visited = new HashMap<>();
         visited.put(source, true);
 
-
         while (!queue.isEmpty()) {
             T currentPredecessor = queue.poll();
             Optional.ofNullable(adjacencyList.get(currentPredecessor)).ifPresent(childList -> childList.forEach(child -> {

@@ -116,6 +116,7 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
         //If the weight of (source to parent + parent to child) < current weight from source to child, update the weight
         if ((sourceToParentWeight + child.getWeight()) < shortestPathMap.get(child.getValue())) {
             shortestPathMap.put(child.getValue(), sourceToParentWeight + child.getWeight());
+            minHeap.remove(child);
             minHeap.add(new WeightedNode<>(child.getValue(), sourceToParentWeight + child.getWeight()));
         }
     }

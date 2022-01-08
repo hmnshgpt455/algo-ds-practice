@@ -1,5 +1,7 @@
 package dataStructures.modals.graphs;
 
+import java.util.Objects;
+
 public class WeightedNode<T> {
     T value;
     Integer weight;
@@ -31,5 +33,18 @@ public class WeightedNode<T> {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WeightedNode<?> that = (WeightedNode<?>) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }
