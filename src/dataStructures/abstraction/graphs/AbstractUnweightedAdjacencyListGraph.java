@@ -72,7 +72,7 @@ public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Unweigh
             if (adjacencyList.get(currentNode) != null) {
                 for (T child : adjacencyList.get(currentNode)) {
                     if (!visited.containsKey(child)) {
-                        if (source.equals(destination)) {
+                        if (child.equals(destination)) {
                             return shortestDistanceMap.get(currentNode) + 1;
                         } else {
                             visited.put(child, true);
@@ -96,6 +96,7 @@ public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Unweigh
         queue.add(source);
         predecessorMap.put(source, null);
         Map<T, Boolean> visited = new HashMap<>();
+        visited.put(source, true);
         boolean isDestinationReached = false;
         while (!queue.isEmpty()) {
             T currentNode = queue.poll();
@@ -120,6 +121,7 @@ public abstract class AbstractUnweightedAdjacencyListGraph<T> implements Unweigh
         }
 
         T currentNodeInPath = destination;
+        shortestPath.push(currentNodeInPath);
         while (predecessorMap.get(currentNodeInPath) != null) {
             shortestPath.push(predecessorMap.get(currentNodeInPath));
             currentNodeInPath = predecessorMap.get(currentNodeInPath);

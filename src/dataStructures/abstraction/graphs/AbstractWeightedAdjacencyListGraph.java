@@ -7,7 +7,6 @@ import java.util.*;
 public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedGraph<T> {
 
     protected final Map<T, List<WeightedNode<T>>> adjacencyList;
-    private Map<T, Integer> shortestPathMap;
 
     public AbstractWeightedAdjacencyListGraph() {
         this.adjacencyList = new HashMap<>();
@@ -103,10 +102,6 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
     @Override
     public Stack<T> getShortestPathFromSourceToDestination(T source, T destination) {
         return null;
-    }
-
-    public Map<T, Integer> getShortestPathMap() {
-        return shortestPathMap;
     }
 
 }
