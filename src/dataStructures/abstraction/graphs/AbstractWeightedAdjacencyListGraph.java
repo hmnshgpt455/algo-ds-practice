@@ -79,7 +79,6 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
 
         while (!minHeap.isEmpty()) {
             WeightedNode<T> minimumNode = minHeap.poll();
-            shortestPathMap.put(minimumNode.getValue(), minimumNode.getWeight());
             adjacencyList.get(minimumNode.getValue()).forEach(child -> updateWeight(minimumNode.getWeight(), child, shortestPathMap, minHeap));
         }
 
@@ -96,12 +95,61 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
 
     @Override
     public Integer getShortestDistanceBetweenSourceAndDestination(T source, T destination) {
-        return null;
+        Map<T, Integer> shortestDistanceMap = new HashMap<>();
+        Map<T, T> predecessorMap = new HashMap<>();
+        buildShortestPathDataMaps(source, destination, shortestDistanceMap, predecessorMap);
+
+        return shortestDistanceMap.get(destination);
+    }
+
+    private void populateMaps(T destination, PriorityQueue<WeightedNode<T>> minHeap, Map<T, Integer> shortestDistanceMap,
+                              Map<T, T> predecessorMap) {
+        while (!minHeap.isEmpty()) {
+            WeightedNode<T> minimumNode = minHeap.poll();
+            if (minimumNode.getValue().equals(destination)) {
+                return;
+            }
+            Optional.ofNullable(adjacencyList.get(minimumNode.getValue()))
+                    .ifPresent(childList -> childList.forEach(child -> updateWeight(minimumNode, child, shortestDistanceMap, minHeap, predecessorMap)));
+        }
+    }
+
+    private void updateWeight(WeightedNode<T> parent, WeightedNode<T> child, Map<T, Integer> shortestDistanceMap,
+                              PriorityQueue<WeightedNode<T>> minHeap, Map<T, T> predecessorMap) {
+        int sourceToParentWeight = parent.getWeight();
+        int childWeight = child.getWeight();
+
+        if (!shortestDistanceMap.containsKey(child.getValue()) ||
+                (sourceToParentWeight + childWeight) < shortestDistanceMap.get(child.getValue())) {
+            shortestDistanceMap.put(child.getValue(), sourceToParentWeight + childWeight);
+            predecessorMap.put(child.getValue(), parent.getValue());
+            minHeap.add(new WeightedNode<>(child.getValue(), sourceToParentWeight + child.getWeight()));
+        }
     }
 
     @Override
     public Stack<T> getShortestPathFromSourceToDestination(T source, T destination) {
-        return null;
+
+        Map<T, Integer> shortestDistanceMap = new HashMap<>();
+        Map<T, T> predecessorMap = new HashMap<>();
+        buildShortestPathDataMaps(source, destination, shortestDistanceMap, predecessorMap);
+        Stack<T> shortestPath = new Stack<>();
+
+        T currentNode = destination;
+        shortestPath.push(destination);
+        while (predecessorMap.get(currentNode) != null) {
+            shortestPath.push(predecessorMap.get(currentNode));
+            currentNode = predecessorMap.get(currentNode);
+        }
+
+        return shortestPath;
+    }
+
+    private void buildShortestPathDataMaps(T source, T destination, Map<T, Integer> shortestDistanceMap, Map<T, T> predecessorMap) {
+        PriorityQueue<WeightedNode<T>> minHeap = new PriorityQueue<>(Comparator.comparingInt(WeightedNode::getWeight));
+        shortestDistanceMap.put(source, 0);
+        minHeap.add(new WeightedNode<>(source, 0));
+        populateMaps(destination, minHeap, shortestDistanceMap, predecessorMap);
     }
 
 }

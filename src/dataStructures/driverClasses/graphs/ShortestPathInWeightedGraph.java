@@ -4,6 +4,7 @@ import dataStructures.abstraction.graphs.WeightedGraph;
 import dataStructures.impl.graphs.WeightedDirectedAdjacencyListGraph;
 
 import java.util.Map;
+import java.util.Stack;
 
 public class ShortestPathInWeightedGraph {
     public static void main(String[] args) {
@@ -35,8 +36,12 @@ public class ShortestPathInWeightedGraph {
                 .addEdge(8, 6, 6)
                 .addEdge(8, 7, 1);
 
-        Map<Integer, Integer> shortestPathMap = weightedGraph.getShortestDistanceFromSourceToEveryNode(0);
+        Map<Integer, Integer> shortestPathMap = weightedGraph.getShortestDistanceFromSourceToEveryNode(8);
         shortestPathMap.forEach((key, value) -> System.out.println(key + " " + value));
-
+        System.out.println(weightedGraph.getShortestDistanceBetweenSourceAndDestination(8, 5));
+        Stack<Integer> shortestPath = weightedGraph.getShortestPathFromSourceToDestination(8, 6);
+        while (!shortestPath.isEmpty()) {
+            System.out.print(shortestPath.pop() + " ");
+        }
     }
 }
