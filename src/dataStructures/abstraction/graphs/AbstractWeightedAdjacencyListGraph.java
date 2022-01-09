@@ -60,16 +60,16 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
 
     @Override
     public Map<T, Integer> getShortestDistanceFromSourceToEveryNode(T source) {
-        return dijkstraShortestPathFromSourceToEveryNode(source);
+        Map<T, Integer> nodeToShortestDistanceMap = new HashMap<>();
+        return dijkstraShortestPathFromSourceToEveryNode(source, nodeToShortestDistanceMap, null);
     }
 
     @Override
     public Integer getShortestDistanceBetweenSourceAndDestination(T source, T destination) {
         Map<T, Integer> shortestDistanceMap = new HashMap<>();
         Map<T, T> predecessorMap = new HashMap<>();
-        buildShortestPathDataMaps(source, destination, shortestDistanceMap, predecessorMap);
 
-        return shortestDistanceMap.get(destination);
+        return dijkstraShortestPathFromSourceToEveryNode(source, shortestDistanceMap, null).get(destination);
     }
 
     @Override
@@ -77,7 +77,7 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
 
         Map<T, Integer> shortestDistanceMap = new HashMap<>();
         Map<T, T> predecessorMap = new HashMap<>();
-        buildShortestPathDataMaps(source, destination, shortestDistanceMap, predecessorMap);
+        dijkstraShortestPathFromSourceToEveryNode(source, shortestDistanceMap, predecessorMap);
         Stack<T> shortestPath = new Stack<>();
 
         T currentNode = destination;
@@ -194,8 +194,7 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
         }
     }
 
-    private Map<T, Integer> dijkstraShortestPathFromSourceToEveryNode(T source) {
-        Map<T, Integer> shortestPathMap = new HashMap<>();
+    private Map<T, Integer> dijkstraShortestPathFromSourceToEveryNode(T source, Map<T, Integer> shortestPathMap, Map<T, T> predecessorMap) {
         //Create a min heap
         PriorityQueue<WeightedNode<T>> minHeap = new PriorityQueue<>(Comparator.comparingInt(WeightedNode::getWeight));
         this.adjacencyList.keySet().forEach(key -> {
@@ -206,33 +205,16 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
             }
         });
         minHeap.add(new WeightedNode<>(source, 0));
+        Optional.ofNullable(predecessorMap).ifPresent(pm -> pm.put(source, null));
 
         while (!minHeap.isEmpty()) {
             WeightedNode<T> minimumNode = minHeap.poll();
             if (adjacencyList.get(minimumNode.getValue()) != null) {
-                adjacencyList.get(minimumNode.getValue()).forEach(child -> updateWeight(minimumNode.getWeight(), child, shortestPathMap, minHeap));
+                adjacencyList.get(minimumNode.getValue()).forEach(child -> updateWeight(minimumNode, child, shortestPathMap, minHeap, predecessorMap));
             }
         }
 
         return shortestPathMap;
-    }
-
-    private void updateWeight(int sourceToParentWeight, WeightedNode<T> child, Map<T, Integer> shortestPathMap, PriorityQueue<WeightedNode<T>> minHeap) {
-        //If the weight of (source to parent + parent to child) < current weight from source to child, update the weight
-        if (!shortestPathMap.containsKey(child.getValue()) || (sourceToParentWeight + child.getWeight()) < shortestPathMap.get(child.getValue())) {
-            shortestPathMap.put(child.getValue(), sourceToParentWeight + child.getWeight());
-            minHeap.remove(child);
-            minHeap.add(new WeightedNode<>(child.getValue(), sourceToParentWeight + child.getWeight()));
-        }
-    }
-
-    private void populateMaps(PriorityQueue<WeightedNode<T>> minHeap, Map<T, Integer> shortestDistanceMap,
-                              Map<T, T> predecessorMap) {
-        while (!minHeap.isEmpty()) {
-            WeightedNode<T> minimumNode = minHeap.poll();
-            Optional.ofNullable(adjacencyList.get(minimumNode.getValue()))
-                    .ifPresent(childList -> childList.forEach(child -> updateWeight(minimumNode, child, shortestDistanceMap, minHeap, predecessorMap)));
-        }
     }
 
     private void updateWeight(WeightedNode<T> parent, WeightedNode<T> child, Map<T, Integer> shortestDistanceMap,
@@ -243,16 +225,9 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
         if (!shortestDistanceMap.containsKey(child.getValue()) ||
                 (sourceToParentWeight + childWeight) < shortestDistanceMap.get(child.getValue())) {
             shortestDistanceMap.put(child.getValue(), sourceToParentWeight + childWeight);
-            predecessorMap.put(child.getValue(), parent.getValue());
+            Optional.ofNullable(predecessorMap).ifPresent(pm -> predecessorMap.put(child.getValue(), parent.getValue()));
             minHeap.add(new WeightedNode<>(child.getValue(), sourceToParentWeight + child.getWeight()));
         }
-    }
-
-    private void buildShortestPathDataMaps(T source, T destination, Map<T, Integer> shortestDistanceMap, Map<T, T> predecessorMap) {
-        PriorityQueue<WeightedNode<T>> minHeap = new PriorityQueue<>(Comparator.comparingInt(WeightedNode::getWeight));
-        shortestDistanceMap.put(source, 0);
-        minHeap.add(new WeightedNode<>(source, 0));
-        populateMaps(minHeap, shortestDistanceMap, predecessorMap);
     }
 
 }
