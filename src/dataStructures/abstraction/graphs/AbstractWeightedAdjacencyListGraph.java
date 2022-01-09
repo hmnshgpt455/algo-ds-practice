@@ -1,5 +1,7 @@
 package dataStructures.abstraction.graphs;
 
+import dataStructures.abstraction.disjointSets.DisjointSet;
+import dataStructures.impl.disjointSets.UnionByRankAndPathCompressionDisjointSet;
 import dataStructures.modals.graphs.Edge;
 import dataStructures.modals.graphs.WeightedNode;
 
@@ -123,6 +125,49 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
         }
 
         return minimumSpanningTreeEdges;
+    }
+
+    @Override
+    public List<Edge<T>> getKruskalMinimumSpanningTree() {
+        //Initialize the disjoint set which keeps the information of which vertex are included in the same set
+        DisjointSet<T> verticesDisjointSet = new UnionByRankAndPathCompressionDisjointSet<>();
+        //All the edges list
+        List<Edge<T>> edgeList = new ArrayList<>();
+        //Populate the data
+        makeDisjointSetAndEdgeList(edgeList, verticesDisjointSet);
+        //Sort the list, so that we can greedily pick the least weighted edge
+        edgeList.sort(Comparator.comparingInt(Edge::getWeight));
+        //Iterate through each edge and check if we can put it in the MST (if the edge vertices are not
+        // in the same set, we pick that edge and put it in the MST)
+        List<Edge<T>> mstEdgesList = new ArrayList<>();
+        edgeList.forEach(edge -> {
+            //Get the sets of both the source and the destination
+           T set1 = verticesDisjointSet.findSet(edge.getSource());
+           T set2 = verticesDisjointSet.findSet(edge.getDestination());
+
+           if (!set1.equals(set2)) {
+               //If both the vertices are not in the same set, that means their edge has not been included
+               //Add the edge to the MST edges list because this is the edge which has the minimum weight till now.
+               mstEdgesList.add(edge);
+               //Make the sets of both the source and the destination same
+               verticesDisjointSet.union(edge.getSource(), edge.getDestination());
+           }
+        });
+
+        return mstEdgesList;
+    }
+
+    private void makeDisjointSetAndEdgeList(List<Edge<T>> edgeList, DisjointSet<T> verticesDisjointSet) {
+        adjacencyList.forEach((vertex, neighbourList) -> {
+            //Make a set for each vertex in the graph
+            verticesDisjointSet.makeSet(vertex);
+            Optional.ofNullable(neighbourList)
+                    .ifPresent(neighbours -> neighbours
+                            .forEach(neighbour -> {
+                                //For each child, add a edge in the edge list
+                                edgeList.add(new Edge<>(vertex, neighbour.getValue(), neighbour.getWeight()));
+                            }));
+        });
     }
 
     private void updatePrimMSTData(PriorityQueue<WeightedNode<T>> minHeap, Map<T, Edge<T>> nodeToEdgeIncludedInMST,
