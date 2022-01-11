@@ -35,8 +35,13 @@ public class ShortestPathInWeightedGraph {
 //                .addEdge(8, 2, 2)
 //                .addEdge(8, 6, 6)
 //                .addEdge(8, 7, 1);
+//        weightedGraph.addEdge(1, 2, 5) //This creates a negative weight cycle
+//                .addEdge(1, 3, 2)
+//                .addEdge(2, 3, -10);
+//
         weightedGraph.addEdge(1, 2, 5)
                 .addEdge(1, 3, 2)
+                .addEdge(3, 2, 1)
                 .addEdge(2, 3, -10);
 
         Map<Integer, Integer> shortestPathMap = weightedGraph.getShortestDistanceFromSourceToEveryNode(1);

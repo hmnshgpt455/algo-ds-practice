@@ -6,6 +6,8 @@ import dataStructures.modals.graphs.Edge;
 import dataStructures.modals.graphs.WeightedNode;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.IntStream;
 
 /**
  * @author Himanshu Gupta
@@ -15,6 +17,8 @@ import java.util.*;
 public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedGraph<T> {
 
     protected final Map<T, List<WeightedNode<T>>> adjacencyList;
+    private boolean isNegativeEdgePresent = false;
+    private Boolean isNegativeWeightCyclePresent = null;
 
     public AbstractWeightedAdjacencyListGraph() {
         this.adjacencyList = new HashMap<>();
@@ -22,6 +26,7 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
 
     @Override
     public WeightedGraph<T> addEdge(T source, T destination, Integer weight) {
+        isNegativeEdgePresent = isNegativeEdgePresent || weight < 0;
         Optional.ofNullable(adjacencyList.get(source))
                 .ifPresentOrElse(childList -> childList.add(new WeightedNode<>(destination, weight)),
                         () -> adjacencyList.put(source, new ArrayList<>(List.of(new WeightedNode<>(destination, weight)))));
@@ -61,15 +66,81 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
     @Override
     public Map<T, Integer> getShortestDistanceFromSourceToEveryNode(T source) {
         Map<T, Integer> nodeToShortestDistanceMap = new HashMap<>();
-        return dijkstraShortestPathFromSourceToEveryNode(source, nodeToShortestDistanceMap, null);
+        if (isNegativeEdgePresent) {
+            //If negative edge is present then only use bellman ford as it is slower than dijkstra
+            bellmanFordShortestPathFromSourceToEveryNode(source, nodeToShortestDistanceMap, null);
+        } else {
+            dijkstraShortestPathFromSourceToEveryNode(source, nodeToShortestDistanceMap, null);
+        }
+        return nodeToShortestDistanceMap;
+    }
+
+    private boolean bellmanFordShortestPathFromSourceToEveryNode(T source, Map<T, Integer> nodeToShortestDistanceToReachMap, Map<T, T> predecessorMap) {
+        //List to store all the edges in the graph
+        List<Edge<T>> edgeList = new ArrayList<>();
+        //Set to store all the distinct vertices in the graph
+        Set<T> distinctVerticesSet = new HashSet<>();
+        adjacencyList.forEach((key, neighbourList) -> {
+            //Add the key to the vertices set
+            distinctVerticesSet.add(key);
+            neighbourList.forEach(neighbour -> {
+                //Add it's neighbours to the vertices set
+               distinctVerticesSet.add(neighbour.getValue());
+               //Initialize all the shortest distances to infinity
+               nodeToShortestDistanceToReachMap.put(neighbour.getValue(), Integer.MAX_VALUE);
+               //Add the encountered edge
+               edgeList.add(new Edge<>(key, neighbour.getValue(), neighbour.getWeight()));
+            });
+        });
+        AtomicBoolean isNegativeWeightCyclePresent = new AtomicBoolean(false);
+        //Number of vertices
+        int numberOfVertices = distinctVerticesSet.size();
+        //Set the distance to reach the source as 0
+        nodeToShortestDistanceToReachMap.put(source, 0);
+        //Run the loop V times (V = total number of vertices), first V-1 times will update the result. Last Vth iteration
+        // will be used to detect the negative weight cycle
+        IntStream.range(1, numberOfVertices+1)
+                .forEach(i -> edgeList.forEach(edge -> updateShortestDistanceAndPath(i==numberOfVertices, nodeToShortestDistanceToReachMap,
+                        predecessorMap, edge, isNegativeWeightCyclePresent)));
+
+        return isNegativeWeightCyclePresent.get();
+    }
+
+    private void updateShortestDistanceAndPath(boolean isLastIteration, Map<T, Integer> nodeToShortestDistanceToReachMap, Map<T, T> predecessorMap, Edge<T> edge,
+                                               AtomicBoolean isNegativeWeightCyclePresent) {
+        //Current shortest distance to reach the destination
+        int currentDistanceToReachDestination = nodeToShortestDistanceToReachMap.get(edge.getDestination());
+        //Weight of the current edge that has been passed
+        int weightOfCurrentEdge = edge.getWeight();
+        //Shortest distance to reach the parent
+        int distanceToReachParent = nodeToShortestDistanceToReachMap.get(edge.getSource());
+
+        if (currentDistanceToReachDestination > (weightOfCurrentEdge + distanceToReachParent)) {
+            //If the new distance is shorter than the previous shortest distance
+            if (isLastIteration) {
+                //This is the Vth iteration, and we do not need to update the data now and set negative weight cycle present flag to true
+                isNegativeWeightCyclePresent.set(true);
+            } else {
+                //Update the shortest distance to current distance
+                nodeToShortestDistanceToReachMap.put(edge.getDestination(), (weightOfCurrentEdge + distanceToReachParent));
+                //Update the predecessor as well
+                if (predecessorMap != null) {
+                    predecessorMap.put(edge.getDestination(), edge.getSource());
+                }
+            }
+        }
     }
 
     @Override
     public Integer getShortestDistanceBetweenSourceAndDestination(T source, T destination) {
         Map<T, Integer> shortestDistanceMap = new HashMap<>();
-        Map<T, T> predecessorMap = new HashMap<>();
+        if (isNegativeEdgePresent) {
+            bellmanFordShortestPathFromSourceToEveryNode(source, shortestDistanceMap, null);
+        } else {
+            dijkstraShortestPathFromSourceToEveryNode(source, shortestDistanceMap, null);
+        }
 
-        return dijkstraShortestPathFromSourceToEveryNode(source, shortestDistanceMap, null).get(destination);
+        return shortestDistanceMap.get(destination);
     }
 
     @Override
@@ -77,7 +148,12 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
 
         Map<T, Integer> shortestDistanceMap = new HashMap<>();
         Map<T, T> predecessorMap = new HashMap<>();
-        dijkstraShortestPathFromSourceToEveryNode(source, shortestDistanceMap, predecessorMap);
+        predecessorMap.put(source, null);
+        if (isNegativeEdgePresent) {
+            bellmanFordShortestPathFromSourceToEveryNode(source, shortestDistanceMap, predecessorMap);
+        } else {
+            dijkstraShortestPathFromSourceToEveryNode(source, shortestDistanceMap, predecessorMap);
+        }
         Stack<T> shortestPath = new Stack<>();
 
         T currentNode = destination;
@@ -85,6 +161,7 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
         while (predecessorMap.get(currentNode) != null) {
             shortestPath.push(predecessorMap.get(currentNode));
             currentNode = predecessorMap.get(currentNode);
+            if (currentNode.equals(destination)) break;
         }
 
         return shortestPath;
@@ -157,6 +234,16 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
         return mstEdgesList;
     }
 
+    @Override
+    public boolean isNegativeWeightCyclePresent() {
+        return bellmanFordShortestPathFromSourceToEveryNode(adjacencyList.keySet().iterator().next(), new HashMap<>(), new HashMap<>());
+    }
+
+    @Override
+    public List<Edge<T>> getNegativeWeightCycleEdges() {
+        return null;
+    }
+
     private void makeDisjointSetAndEdgeList(List<Edge<T>> edgeList, DisjointSet<T> verticesDisjointSet) {
         adjacencyList.forEach((vertex, neighbourList) -> {
             //Make a set for each vertex in the graph
@@ -194,7 +281,7 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
         }
     }
 
-    private Map<T, Integer> dijkstraShortestPathFromSourceToEveryNode(T source, Map<T, Integer> shortestPathMap, Map<T, T> predecessorMap) {
+    private void dijkstraShortestPathFromSourceToEveryNode(T source, Map<T, Integer> shortestPathMap, Map<T, T> predecessorMap) {
         //Create a min heap
         PriorityQueue<WeightedNode<T>> minHeap = new PriorityQueue<>(Comparator.comparingInt(WeightedNode::getWeight));
         this.adjacencyList.keySet().forEach(key -> {
@@ -214,7 +301,6 @@ public abstract class AbstractWeightedAdjacencyListGraph<T> implements WeightedG
             }
         }
 
-        return shortestPathMap;
     }
 
     private void updateWeight(WeightedNode<T> parent, WeightedNode<T> child, Map<T, Integer> shortestDistanceMap,
