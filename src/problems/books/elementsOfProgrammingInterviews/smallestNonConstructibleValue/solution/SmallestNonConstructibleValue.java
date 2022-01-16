@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
     Inputs : n = 6, arr = [12, 2, 1, 15, 2, 4]
     n = 2, [1, 12]
     Source : Elements of Programming interviews, page 32
+    Time complexity O(nlogn)
  */
 
 public class SmallestNonConstructibleValue {
