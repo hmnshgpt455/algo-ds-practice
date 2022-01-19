@@ -17,5 +17,9 @@ public class Helper {
         Scanner sc = new Scanner(System.in);
         return Arrays.stream(sc.nextLine().split(" ")).map(Integer::parseInt).collect(Collectors.toList());
     }
+    public static List<Double> takeDoubleArrayAsInput() {
+        Scanner sc = new Scanner(System.in);
+        return Arrays.stream(sc.nextLine().split(" ")).map(Double::parseDouble).collect(Collectors.toList());
+    }
 
 }
