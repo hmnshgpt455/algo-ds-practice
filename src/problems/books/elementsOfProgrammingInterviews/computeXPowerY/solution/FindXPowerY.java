@@ -35,6 +35,7 @@ public class FindXPowerY {
     //x^y = x^((2^a) + (2^b) + (2^c) + …. + (2^n)), y is even
     //= x^(2^a) . x^(2^b) . x^(2^c) …. x ^ (2^n)
     //= ((x^2)^a) . ((x^2)^b) . ((x^2)^c) …. ((x^2)^n)
-    //(x^2)^a can be considered multiplying x^2 a times, which can be done in a loop that will //run till the bit at index a is extracted out by doing right shift a times.
+    //(x^2)^a can be considered multiplying x^2 a times, which can be done in a loop that will
+    // run till the bit at index a is extracted out by doing right shift a times.
 
 }
