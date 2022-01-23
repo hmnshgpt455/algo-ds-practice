@@ -1,14 +1,10 @@
 import problems.books.elementsOfProgrammingInterviews.Helper;
 
+import java.util.LinkedHashMap;
+
 public class PlayGround {
     public static void main(String[] args) {
 
-        Helper.bin(8);
-        System.out.println();
-        Helper.bin(8 ^ 1);
-        System.out.println();
-        Helper.bin(8 & 1);
-        System.out.println();
-        Helper.bin(8 | 1);
+        LinkedHashMap<String, Integer> m = new LinkedHashMap<>();
     }
 }
