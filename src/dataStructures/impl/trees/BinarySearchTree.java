@@ -109,7 +109,8 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends BinaryTre
     @Override
     public BinarySearchTree<T> insertKey(T key) {
         if (this.root == null) {
-            this.root = new BinaryTreeNode<>();
+            this.root = new BinaryTreeNode<>(key);
+            return this;
         }
         insertKeyRecursively(key, this.root);
         return this;
