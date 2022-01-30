@@ -1,5 +1,7 @@
 package problems.books.elementsOfProgrammingInterviews.checkIfLinkedListsAreOverlapping.solution;
 
+import java.util.Arrays;
+
 /**
  * @author Himanshu Gupta
  * Problem : 8.4 : Check if two linked lists overlap
